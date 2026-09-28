@@ -10,9 +10,8 @@ tasks:
       package: akinoiro/ssh-list
       state: ${{ ssh.ssh_list | default(true) | ternary('present', 'absent') }}
       args:
-        - --to=${{ facts.local_bin_path | join('ssh-list.exe') }}
+        - --to=${{ facts.local_bin_path | join('ssh-list') | extension("exe") }}
         - --upgrade-only
-        - --asset=".zip"
 
   - name: byawitz/ggh
     tags:
@@ -22,7 +21,7 @@ tasks:
       package: byawitz/ggh
       state: ${{ ssh.ggh | default(true) | ternary('present', 'absent') }}
       args:
-        - --to=${{ facts.local_bin_path | join('ggh.exe') }}
+        - --to=${{ facts.local_bin_path | join('ggh') | extension("exe") }}
         - --upgrade-only
 
   - name: WinSCP

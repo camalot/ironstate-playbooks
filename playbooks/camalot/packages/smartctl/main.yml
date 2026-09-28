@@ -1,0 +1,8 @@
+---
+
+tasks:
+  - name: Install smartmontools
+    when:
+      - facts.os_family == "windows"
+    include:
+      name: packages/smartctl/windows

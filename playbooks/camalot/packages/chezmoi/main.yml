@@ -1,0 +1,16 @@
+---
+
+tasks:
+  - name: Install Chezmoi
+    tags: 
+      - dotfiles
+      - cli
+    xget:
+      package: twpayne/chezmoi
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path | default("~/.local/bin") }}
+        - --upgrade-only
+        - --ignore=.sbom.json
+        - --ignore=musl
+        - --asset="~(\.tar\.gz|\.zip)"

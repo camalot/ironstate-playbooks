@@ -1,0 +1,16 @@
+---
+
+tasks:
+  - tags: 
+      - lolcat
+    cargo:
+      package: lcat
+      state: ${{ package.state }}
+
+  - tags: 
+      - lolcat
+      - cli
+    symlinks:
+      src: ${{ "~/.cargo/bin/lcat" | extension("exe") }}
+      dest: ${{ "~/.local/bin/lolcat" | extension("exe") }}
+      state: ${{ package.state }}
