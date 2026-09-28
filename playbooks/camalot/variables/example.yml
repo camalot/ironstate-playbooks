@@ -1,0 +1,64 @@
+---
+vars:
+  git:
+    ssh_rewrite: true
+    user:
+      name: "John Doe"
+      email: "john.doe@example.com"
+    profiles:
+      - name: work
+        gitdirs: 
+          - "gitdir:~/Development/work/"
+          - "gitdir/i:${{ development.work }}"
+        
+        user:
+          name: "John Doe"
+          email: "john.doe@my-company.com"
+      - name: oss
+        gitdirs: 
+          - "gitdir:~/Development/oss/"
+          - "gitdir/i:${{ development.oss }}"
+        user:
+          name: "John Doe"
+          email: "john.doe@example.com"
+
+  github:
+    commercial:
+      host: github.com
+      identity_file: ~/.ssh/id_rsa
+    enterprise:
+      # These allow you to have multiple enterprise github hosts, each with their own 
+      # identity file and list of organizations. This allows the use of a separate 
+      # identity file for both commercial and enterprise github hosts, and allows for 
+      # multiple enterprise github hosts with different identity files and organizations.
+      # This creates configurations in ~/.ssh/config as well as in ~/.gitconfig for each
+      # enterprise github host, allowing for easy access to multiple enterprise github
+      # hosts with different identity files and organizations.
+      - host: github.my-company.com
+        host_name: github.com
+        identity_file: ~/.ssh/id_ed25519
+        orgs:
+          - ent-org-a
+          - ent-org-b
+          - ent-org-c
+
+  ssh:
+    hosts:
+      - host: 192.168.1.1
+        host_name: 192.168.1.1
+        user: someuser
+        identity_files:
+          - ~/.ssh/id_rsa
+        identities_only: yes
+        # ... 
+        # other ssh host configuration options can be added here as needed
+        # use snake_case for keys and values, and use underscores for multi-word keys
+        # identity_files becomes multiple entries of identity_file, and identities_only is a boolean value
+    authorized_keys:
+      - github_user: fake_user
+      - file: /path/to/public_key.pub
+      - public_key: ssh-ed25519 ...
+    administrators_authorized_keys:
+      - github_user: fake_user
+      - file: /path/to/public_key.pub
+      - public_key: ssh-ed25519 ...

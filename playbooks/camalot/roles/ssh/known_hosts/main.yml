@@ -1,0 +1,21 @@
+---
+tasks:
+  - name: Add host keys to known_hosts
+    tags:
+      - ssh
+      - ssh.known_hosts
+    when: ssh.known_hosts is defined
+    items: "${{ vars.ssh.known_hosts | default([]) }}"
+    actions:
+      - name: Add GitHub public key(s) to known_hosts
+        when: "${{ item.key is defined }}"
+        tags:
+          - ssh
+          - ssh.known_hosts
+
+        blockinfile:
+          dest: ~/.ssh/known_hosts
+          marker_name: "${{ item.key | sha1 }}"
+          block: "${{ item.key | split('\n') | prefix(item.hostnames | default([]) | concat(' ')) | concat('\n') }}"
+          create: true
+          state: present
