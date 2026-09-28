@@ -18,7 +18,7 @@ tasks:
       package: dandavison/delta
       state: present
       args:
-        - --to=~/.local/bin/delta.exe
+        - --to=${{ facts.local_bin_path | join("delta") | extension("exe") }}
         - --upgrade-only
 
   - name: Render global gitconfig

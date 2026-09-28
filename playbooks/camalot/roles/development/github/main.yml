@@ -66,7 +66,7 @@ tasks:
       state: "${{ development.github | enabled('act') | ternary('present', 'absent') }}"
 
       args:
-        - --to=~/.local/bin/act.exe
+        - --to=${{ facts.local_bin_path | join("act") | extension("exe") }}
         - --upgrade-only
 
   - name: Install dhth/act3
@@ -88,7 +88,7 @@ tasks:
       package: akunzai/gistui
       state: "${{ development.github | enabled('gistui') | ternary('present', 'absent') }}"
       args:
-        - --to=~/.local/bin/gistui.exe
+        - --to=${{ facts.local_bin_path | join("gistui") | extension("exe") }}
         - --upgrade-only
 
   - name: Render commercial GitHub SSH host
