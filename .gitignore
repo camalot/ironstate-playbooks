@@ -23,6 +23,7 @@ playbooks/
 **/variables/**
 !**/variables/.gitkeep
 !**/variables/example.yml
+!.github/linters/super-linter.env
 
 .*.taskfile.yml
 

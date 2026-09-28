@@ -1,0 +1,150 @@
+---
+name: 'Publish Release'
+on: # yamllint disable-line rule:truthy
+  workflow_dispatch:
+    inputs:
+      force-next-version:
+        description: 'Force the next version. Must be in the format vX.Y.Z. Tag must not exist.'
+        required: false
+        default: ''
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    # the release action pushes the changelog commit and floating tags to this ref
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      statuses: write
+      issues: write
+      pull-requests: write
+    outputs:
+      ver_major_minor_patch: ${{ steps.get.outputs.major_minor_patch }}
+      tag_major: ${{ steps.get.outputs.tag_major }}
+      tag_major_minor: ${{ steps.get.outputs.tag_major_minor }}
+      tag_major_minor_patch: ${{ steps.get.outputs.tag_major_minor_patch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Determine next version
+        id: get
+        uses: camalot/actions/version/get@v1
+        with:
+          default_version: v1.0.0
+          fail_on_default: false
+          fail_on_same_version: false
+          token: ${{ github.token }}
+        env:
+          FORCE_NEXT_VERSION: ${{ github.event.inputs.force-next-version || '' }}
+
+      - run: |
+          echo "next version: ${TAG}"
+        env:
+          TAG: ${{ steps.get.outputs.tag_major_minor_patch }}
+
+  lint:
+    runs-on: ubuntu-latest
+    needs:
+      - version
+    permissions:
+      contents: read
+      statuses: write
+      issues: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Lint Codebase
+        uses: camalot/actions/smells/lint@v1
+        with:
+          token: ${{ github.token }}
+          default_branch: main
+          super_linter_env_file: .github/linters/super-linter.env
+
+  package:
+    runs-on: ubuntu-latest
+    needs:
+      - version
+      - lint
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    env:
+      TARBALL: ${{ github.event.repository.name }}-${{ needs.version.outputs.ver_major_minor_patch }}.tar.gz
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Package playbooks
+        run: |
+          mkdir -p dist
+          tar -czf "dist/${TARBALL}" playbooks/
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: playbooks
+          format: spdx-json
+          output-file: dist/sbom.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Attest build provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/${{ env.TARBALL }}
+
+      - name: Attest SBOM
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/${{ env.TARBALL }}
+          sbom-path: dist/sbom.json
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-dist
+          path: dist/
+          if-no-files-found: error
+
+  release:
+    runs-on: ubuntu-latest
+    if: success()
+    needs:
+      - version
+      - lint
+      - package
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-dist
+          path: ${{ runner.temp }}/dist
+
+      - name: Tag, changelog, and GitHub Release
+        uses: camalot/actions/version/release@v1
+        with:
+          tag_major: ${{ needs.version.outputs.tag_major }}
+          tag_major_minor: ${{ needs.version.outputs.tag_major_minor }}
+          tag_major_minor_patch: ${{ needs.version.outputs.tag_major_minor_patch }}
+          changelog_file: CHANGELOG.md
+          token: ${{ github.token }}
+        env:
+          RELEASE_FILES_GLOB: '${{ runner.temp }}/dist/*'
