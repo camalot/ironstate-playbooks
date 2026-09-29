@@ -1,0 +1,12 @@
+---
+
+vars: 
+
+  languages:
+    golang: true
+
+tasks:
+
+  - name: Include base host configuration
+    include:
+      name: hosts/base

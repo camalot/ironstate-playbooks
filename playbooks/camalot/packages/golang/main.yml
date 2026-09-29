@@ -13,6 +13,24 @@ tasks:
         when:
           - facts.os_family == "archlinux"
 
+      - name: GOPATH
+        fact:
+          name: GOPATH
+          value: ${{ env("GOPATH") }}
+
+      - name: GOBIN
+        fact:
+          name: GOBIN
+          value: ${{ env(facts.GOPATH | join("bin" ))}}
+        when:
+          - facts.GOPATH is defined
+          - facts.GOPATH != ""
+
+      - name: GOBIN in PATH
+        fact:
+          name: gopath_in_path
+          value: ${{ env("GOBIN") }} in ${{ env("PATH") }}
+
       - name: Register GoPath
         when:
           - facts.shell_zsh

@@ -4,10 +4,6 @@ vars: {}
 
 tasks:
 
-  - name: Test Task
-    debug:
-      msg: "This is a test task"
-
   - name: Include Languages Role
     include:
       name: roles/languages
