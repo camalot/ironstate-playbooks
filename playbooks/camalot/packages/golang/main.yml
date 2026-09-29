@@ -1,0 +1,28 @@
+---
+
+tasks:
+  - name: Install Golang
+    tags:
+      - golang
+    actions:
+      - name: Install Golang
+        pacman:
+          name: go
+          state: ${{ package.state }}
+        become: true
+        when:
+          - facts.os_family == "archlinux"
+
+      - name: Register GoPath
+        when:
+          - facts.shell_zsh
+        blockinfile:
+          create: false
+          dest: ~/.zshrc
+          block: |
+            if [ -z "$GOPATH" ]; then
+              export GOPATH=$HOME/go
+              if [ -z "$PATH" ] || [[ ":$PATH:" != *":$GOPATH/bin:"* ]]; then
+                export PATH=$PATH:$GOPATH/bin
+              fi
+            fi

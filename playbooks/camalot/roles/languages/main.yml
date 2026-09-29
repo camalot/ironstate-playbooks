@@ -1,0 +1,7 @@
+---
+
+- name: Include Golang Role
+  include:
+    name: packages/golang
+  when:
+    - languages | enabled('golang')

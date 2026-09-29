@@ -1,0 +1,17 @@
+---
+tasks:
+
+  - name: Local Binaries Path Fact
+    fact:
+      name: local_bin_path
+      value: ${{ local.bin_path | default('~/.local/bin') }}
+
+  - name: Verify Local Binaries Path Fact
+    assert:
+      that:
+        - facts.local_bin_path is defined
+        - facts.local_bin_path | length > 0
+        - facts.local_bin_path | exists
+      fail_msg: "Local bin path fact is not defined or empty. Please define 'vars.local.bin_path' in your inventory or host vars."
+      success_msg: "Local bin path fact is defined and valid. Path: ${{ facts.local_bin_path }}"
+

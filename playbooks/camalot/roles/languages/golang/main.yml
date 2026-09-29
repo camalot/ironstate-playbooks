@@ -1,0 +1,49 @@
+---
+
+tasks:
+  - name: Include GoLang
+    include:
+      name: packages/golang
+    when:
+      - languages.golang | enabled()
+
+  # - name: Install Golang
+  #   tags: 
+  #     - languages
+  #     - languages.golang
+  #   winget:
+  #     package: "GoLang.Go"
+  #     state: ${{ languages.golang | enabled() | ternary('present', 'absent') }}
+
+  # - name: Install golangci-lint
+  #   tags: 
+  #     - languages
+  #     - languages.golang
+  #   xget:
+  #     package: "golangci/golangci-lint"
+  #     state: ${{ languages.golang | enabled() | ternary('present', 'absent') }}
+  #     args:
+  #       - --to=${{ facts.local_bin_path | join('golangci-lint') | extension("exe") }}
+
+  # - name: Cleanup GoReleaser
+  #   tags: 
+  #     - languages
+  #     - languages.golang
+  #   winget:
+  #     package: "goreleaser.goreleaser"
+  #     state: absent
+
+  # - name: Install GoReleaser
+  #   tags: 
+  #     - languages
+  #     - languages.golang
+  #   xget:
+  #     package: "goreleaser/goreleaser"
+  #     state: ${{ languages.golang | enabled() | ternary('present', 'absent') }}
+  #     args:
+  #       - --to=${{ facts.local_bin_path | join(item.bin) }}
+  #       - --ignore=.sbom.json
+  #   with:
+  #     bin: "${{ (facts.os_family == 'windows') | ternary('goreleaser.exe', 'goreleaser') }}"
+  #   when:
+  #     - languages.golang | enabled()
