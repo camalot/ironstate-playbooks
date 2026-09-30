@@ -1,0 +1,14 @@
+---
+
+tasks:
+  - name: Install ${{ item }} (${{ facts.os_family }})
+    pacman:
+      package: ${{ item }}
+      state: ${{ package.state }}
+    become: true
+    when:
+      - facts.os_family == "archlinux"
+    items:
+      - nodejs
+      - npm
+      - nvm

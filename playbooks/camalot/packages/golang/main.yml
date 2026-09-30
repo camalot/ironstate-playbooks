@@ -1,18 +1,10 @@
 ---
 
 tasks:
-  - name: Install Golang
+  - name: Golang Package
     tags:
       - golang
     actions:
-      - name: Install Golang
-        pacman:
-          name: go
-          state: ${{ package.state }}
-        become: true
-        when:
-          - facts.os_family == "archlinux"
-
       - name: GOPATH
         fact:
           name: GOPATH
@@ -21,19 +13,25 @@ tasks:
       - name: GOBIN
         fact:
           name: GOBIN
-          value: ${{ env(facts.GOPATH | join("bin" ))}}
+          value: ${{ facts.GOPATH | join("bin") }}
         when:
           - facts.GOPATH is defined
           - facts.GOPATH != ""
 
+      - name: OS PATH Separator
+        fact:
+          name: os_path_separator
+          value: ${{ (facts.platform == "windows") | ternary(";", ":") }}
+
       - name: GOBIN in PATH
         fact:
           name: gopath_in_path
-          value: ${{ env("GOBIN") }} in ${{ env("PATH") }}
+          value: ${{ (facts.os_path_separator | concat("", env("PATH")) | concat("", facts.os_path_separator)) | contains(facts.os_path_separator | concat("", facts.GOBIN | default("???NOMATCH???")) | concat("", facts.os_path_separator)) }}
 
-      - name: Register GoPath
+      - name: Register GoPath (zsh)
         when:
           - facts.shell_zsh
+          - not facts.gopath_in_path
         blockinfile:
           create: false
           dest: ~/.zshrc
@@ -44,3 +42,63 @@ tasks:
                 export PATH=$PATH:$GOPATH/bin
               fi
             fi
+
+      - name: Register GoPath (bash)
+        when:
+          - facts.shell_bash
+          - not facts.gopath_in_path
+        blockinfile:
+          create: false
+          dest: ~/.bashrc
+          block: |
+            if [ -z "$GOPATH" ]; then
+              export GOPATH=$HOME/go
+              if [ -z "$PATH" ] || [[ ":$PATH:" != *":$GOPATH/bin:"* ]]; then
+                export PATH=$PATH:$GOPATH/bin
+              fi
+            fi
+
+      - name: Register GoPath (fish)
+        when:
+          - facts.shell_fish
+          - not facts.gopath_in_path
+        blockinfile:
+          create: false
+          dest: ~/.config/fish/config.fish
+          block: |
+            if not set -q GOPATH
+              set -x GOPATH $HOME/go
+              if not contains $GOPATH/bin $PATH
+                set -x PATH $PATH $GOPATH/bin
+              end
+            end
+
+      - name: Register GoPath (powershell)
+        when:
+          - facts.shell_powershell
+          - not facts.gopath_in_path
+        blockinfile:
+          create: false
+          dest: ~/.config/powershell/profile.ps1
+          block: |
+            if (-not $env:GOPATH) {
+              $env:GOPATH = "$HOME/go"
+              if (-not $env:PATH.Contains("$env:GOPATH/bin")) {
+                $env:PATH = "$env:PATH;$env:GOPATH/bin"
+              }
+            }
+
+      - name: Register GoPath (nushell)
+        when:
+          - facts.shell_nu
+          - not facts.gopath_in_path
+        blockinfile:
+          create: false
+          dest: ~/.config/nushell/config.nu
+          block: |
+            if not $env:GOPATH {
+              set -x GOPATH $HOME/go
+              if not $env:PATH | str contains $GOPATH/bin {
+                set -x PATH $env:PATH $GOPATH/bin
+              end
+            end

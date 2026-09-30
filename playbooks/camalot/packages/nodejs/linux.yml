@@ -1,0 +1,15 @@
+---
+
+tasks:
+
+  - name: Install ${{ item }} (${{ facts.os_family }})
+    apt:
+      package: ${{ item }}
+      state: ${{ package.state }}
+    become: true
+    when:
+      - facts.is_debian
+    items:
+      - nodejs
+      - npm
+    

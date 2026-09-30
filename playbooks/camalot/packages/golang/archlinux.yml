@@ -1,0 +1,10 @@
+---
+
+tasks:
+  - name: Install Golang (${{ facts.os_family }})
+    pacman:
+      package: go
+      state: ${{ package.state }}
+    become: true
+    when:
+      - facts.os_family == "archlinux"

@@ -1,0 +1,20 @@
+---
+vars:
+
+  defaults:
+    languages:
+      python: '3.14'
+tasks:
+  - name: Install ${{ item }} (${{ facts.os_family }})
+    tags:
+      - languages
+      - languages.python
+    when:
+      - item is defined
+      - facts.os_family == 'windows'
+    winget:
+      package: "${{ item}}"
+      state: "${{ languages.python | ternary('present', 'absent') }}"
+    items:
+      - Python.Launcher
+      - '${{ "Python.Python." | concat("", languages.python | toggle(defaults.languages.python)) }}'

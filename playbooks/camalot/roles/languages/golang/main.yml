@@ -2,48 +2,36 @@
 
 tasks:
   - name: Include GoLang
+    tags: 
+      - languages
+      - languages.golang
     include:
       name: packages/golang
+      state: ${{ languages | enabled("golang") | ternary('present', 'absent') }}
     when:
-      - languages.golang | enabled()
+      - languages | enabled("golang")
 
-  # - name: Install Golang
-  #   tags: 
-  #     - languages
-  #     - languages.golang
-  #   winget:
-  #     package: "GoLang.Go"
-  #     state: ${{ languages.golang | enabled() | ternary('present', 'absent') }}
+  - name: Install golangci-lint
+    tags: 
+      - languages
+      - languages.golang
+    when:
+      - languages | enabled("golang")
+    xget:
+      package: "golangci/golangci-lint"
+      state: ${{ languages | enabled("golang") | ternary('present', 'absent') }}
+      args:
+        - --to=${{ facts.local_bin_path | join('golangci-lint') | extension("exe") }}
 
-  # - name: Install golangci-lint
-  #   tags: 
-  #     - languages
-  #     - languages.golang
-  #   xget:
-  #     package: "golangci/golangci-lint"
-  #     state: ${{ languages.golang | enabled() | ternary('present', 'absent') }}
-  #     args:
-  #       - --to=${{ facts.local_bin_path | join('golangci-lint') | extension("exe") }}
-
-  # - name: Cleanup GoReleaser
-  #   tags: 
-  #     - languages
-  #     - languages.golang
-  #   winget:
-  #     package: "goreleaser.goreleaser"
-  #     state: absent
-
-  # - name: Install GoReleaser
-  #   tags: 
-  #     - languages
-  #     - languages.golang
-  #   xget:
-  #     package: "goreleaser/goreleaser"
-  #     state: ${{ languages.golang | enabled() | ternary('present', 'absent') }}
-  #     args:
-  #       - --to=${{ facts.local_bin_path | join(item.bin) }}
-  #       - --ignore=.sbom.json
-  #   with:
-  #     bin: "${{ (facts.os_family == 'windows') | ternary('goreleaser.exe', 'goreleaser') }}"
-  #   when:
-  #     - languages.golang | enabled()
+  - name: Install GoReleaser
+    tags: 
+      - languages
+      - languages.golang
+    xget:
+      package: "goreleaser/goreleaser"
+      state: ${{ languages | enabled("golang") | ternary('present', 'absent') }}
+      args:
+        - --to=${{ facts.local_bin_path | join('goreleaser') | extension("exe") }}
+        - --ignore=.sbom.json
+    when:
+      - languages | enabled("golang")

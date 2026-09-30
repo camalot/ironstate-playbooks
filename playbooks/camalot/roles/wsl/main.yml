@@ -1,18 +1,30 @@
 ---
 
 tasks:
-  - name: Install Windows Subsystem for Linux (WSL)
-    winget:
-      package: Microsoft.WSL
-      state: present
-    when:
-      - facts.os_family == 'windows'
 
-  - name: Is WSL Installed Fact
+  - name: Is WSL Environment
     fact:
-      name: wsl_installed
+      name: is_wsl
       shell:
-        command: Get-Command wsl | Out-Null
+        type: bash
+        command: '[ -n "$WSL_DISTRO_NAME" ] && exit 0 || exit 1'
       value: ${{ rc == 0 }}
     when:
-      - facts.os_family == 'windows'
+      - facts.os_family != 'windows'
+
+  - name: Is WSL2 Environment
+    fact:
+      name: is_wsl2
+      shell:
+        type: bash
+        command: "[ $(uname -r | grep -o 'microsoft-standard-WSL2') ] && exit 0 || exit 1"
+      value: ${{ rc == 0 }}
+    when:
+      - facts.is_wsl is defined and (facts.is_wsl | default(false))
+
+  - name: Is WSL UI Enabled
+    fact:
+      name: is_wsl_ui_enabled
+      value: ${{ vars.wsl.ui | default(false) }}
+    when:
+      - facts.is_wsl is defined and (facts.is_wsl | default(false))

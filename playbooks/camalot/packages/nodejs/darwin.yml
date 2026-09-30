@@ -1,0 +1,12 @@
+---
+
+tasks:
+  - name: Install ${{ item }} (${{ facts.os_family }})
+    brew:
+      package: ${{ item }}
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "darwin"
+    items:
+      - node
+      - nvm

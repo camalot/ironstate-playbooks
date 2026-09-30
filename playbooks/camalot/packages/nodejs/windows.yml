@@ -1,0 +1,12 @@
+---
+
+tasks:
+  - name: Install ${{ item }} (${{ facts.os_family }})
+    winget:
+      package: ${{ item }}
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "windows"
+    items: 
+      - CoreyButler.NVMforWindows
+      - OpenJS.NodeJS

@@ -1,0 +1,25 @@
+---
+
+tasks:
+  - name: Install Python (${{ facts.os_family }})
+    tags:
+      - languages.python
+      - languages
+    when:
+      - facts.os_family == "archlinux"
+    pacman:
+      name: ${{ item }}
+      state: present
+    items:
+      - python
+      - python-pip
+      - python-pipx
+
+  - name: Include pipx package
+    tags:
+      - languages.python
+      - languages
+    when:
+      - facts.os_family == "archlinux"
+    include:
+      name: packages/pipx

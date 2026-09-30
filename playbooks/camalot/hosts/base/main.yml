@@ -4,8 +4,22 @@ vars: {}
 
 tasks:
 
+  - name: Include WSL Role
+    include:
+      name: roles/wsl
+
+  - name: Include Debian-Based Role
+    include:
+      name: tasks/debian-based
+
   - name: Include Languages Role
     include:
       name: roles/languages
     when:
       - languages | enabled()
+
+  - name: Include Development Role
+    include:
+      name: roles/development
+    when:
+      - development | enabled()

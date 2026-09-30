@@ -1,0 +1,25 @@
+---
+
+tasks:
+  - name: Install Python (${{ facts.os_family }})
+    tags:
+      - languages.python
+      - languages
+    when:
+      - facts.os_family == "alpine"
+    apk:
+      name: ${{ item }}
+      state: present
+    items:
+      - python3
+      - py3-pip
+      - pipx
+
+  - name: Include pipx package
+    tags:
+      - languages.python
+      - languages
+    when:
+      - facts.os_family == "alpine"
+    include:
+      name: packages/pipx

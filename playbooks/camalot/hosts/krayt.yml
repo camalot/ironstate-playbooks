@@ -2,8 +2,18 @@
 
 vars: 
 
+  wsl:
+    ui: false
+
   languages:
     golang: true
+    nodejs: true
+    python: true
+
+  development:
+    editors:
+      vscode: true
+      micro: true
 
 tasks:
 

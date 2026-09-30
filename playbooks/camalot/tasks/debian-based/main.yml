@@ -1,0 +1,20 @@
+---
+tasks:
+  - name: Is the system Debian-based
+    fact:
+      name: is_debian
+      shell: 
+        type: bash
+        command: '[ -f /etc/debian_version ] && echo true || echo false'
+      value: ${{ stdout | trim() == 'true' }}
+    when:
+      - facts.platform in ['linux']
+  - name: Debian Version
+    fact:
+      name: debian_version
+      shell:
+        type: bash
+        command: cat /etc/debian_version
+      value: ${{ stdout | trim() }}
+    when:
+      - facts.is_debian

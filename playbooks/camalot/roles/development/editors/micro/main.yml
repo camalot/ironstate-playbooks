@@ -1,0 +1,10 @@
+---
+
+tasks:
+
+  - name: Install Micro Editor (${{ facts.os_family }})
+    xget:
+      package: micro-editor/micro
+      state: ${{ development | enabled("editors", "micro") | ternary("present", "absent") }}
+    when:
+      - development | enabled("editors", "micro")

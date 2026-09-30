@@ -1,0 +1,13 @@
+---
+
+tasks: 
+
+  - name: Install npm package ${{ item }} (${{ facts.os_family }})
+    npm:
+      package: ${{ item }}
+      state: ${{ package.state }}
+    items:
+      - pnpm
+      - yarn
+      - nub
+      - bun

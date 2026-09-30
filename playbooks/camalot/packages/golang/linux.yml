@@ -1,0 +1,11 @@
+---
+
+tasks:
+
+  - name: Install GoLang (${{ facts.os_family }})
+    apt:
+      package: golang
+      state: ${{ package.state }}
+    become: true
+    when:
+      - facts.is_debian

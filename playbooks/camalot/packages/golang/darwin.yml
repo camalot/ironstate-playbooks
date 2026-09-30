@@ -1,0 +1,9 @@
+---
+
+tasks:
+  - name: Install GoLang (${{ facts.os_family }})
+    brew:
+      package: go
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "darwin"

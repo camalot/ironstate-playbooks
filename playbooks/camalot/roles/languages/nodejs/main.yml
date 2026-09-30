@@ -1,0 +1,14 @@
+---
+
+tasks:
+
+  - name: Include NodeJS Package
+    tags: 
+      - languages
+      - languages.node
+      - languages.nodejs
+    include:
+      name: packages/nodejs
+      state: ${{ languages | enabled("nodejs") | ternary('present', 'absent') }}
+    when:
+      - languages | enabled("nodejs")

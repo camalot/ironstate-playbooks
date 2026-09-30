@@ -1,0 +1,44 @@
+---
+
+tasks:
+
+  - name: Install Visual Studio Code (${{ facts.os_family }})
+    log:
+      message: "Unsupported OS family: ${{ facts.os_family }}"
+    when:
+      - facts.os_family not in ["debian", "ubuntu", "archlinux", "windows", "darwin"]
+      - development | enabled("editors", "vscode")
+
+  - name: Install Visual Studio Code (${{ facts.os_family }})
+    apt:
+      package: code
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "debian" or facts.os_family == "ubuntu"
+      - facts.is_wsl is not defined or (facts.is_wsl and facts.is_wsl_ui_enabled)
+      - development | enabled("editors", "vscode")
+
+  - name: Install Visual Studio Code (${{ facts.os_family }})
+    pacman:
+      package: code
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "archlinux"
+      - facts.is_wsl is not defined or (facts.is_wsl and facts.is_wsl_ui_enabled)
+      - development | enabled("editors", "vscode")
+
+  - name: Install Visual Studio Code (${{ facts.os_family }})
+    winget:
+      package: Microsoft.VisualStudioCode
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "windows"
+      - development | enabled("editors", "vscode")
+
+  - name: Install Visual Studio Code (${{ facts.os_family }})
+    brew:
+      package: visual-studio-code
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "darwin"
+      - development | enabled("editors", "vscode")

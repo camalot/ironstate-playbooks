@@ -1,0 +1,13 @@
+---
+
+tasks:
+  - name: Install ${{ item }} (${{ facts.os_family }})
+    apk:
+      package: ${{ item }}
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "alpine"
+    items:
+      - nodejs
+      - npm
+      - nvm

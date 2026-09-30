@@ -1,7 +1,20 @@
 ---
 
-- name: Include Golang Role
-  include:
-    name: packages/golang
-  when:
-    - languages | enabled('golang')
+tasks:
+  - name: Include Golang Role
+    include:
+      name: roles/languages/golang
+    when:
+      - languages | enabled('golang')
+
+  - name: Include NodeJS Role
+    include:
+      name: roles/languages/nodejs
+    when:
+      - languages | enabled('nodejs')
+
+  - name: Include Python Role
+    include:
+      name: roles/languages/python
+    when:
+      - languages | enabled('python')

@@ -1,0 +1,9 @@
+---
+
+tasks:
+  - name: Install GoLang (${{ facts.os_family }})
+    winget:
+      package: GoLang.Go
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "windows"

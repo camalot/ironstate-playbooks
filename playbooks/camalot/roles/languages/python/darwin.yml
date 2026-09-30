@@ -1,0 +1,24 @@
+---
+
+tasks:
+  - name: Install Python (${{ facts.os_family }})
+    tags:
+      - languages.python
+      - languages
+    when:
+      - facts.os_family == "darwin"
+    brew:
+      name: ${{ item }}
+      state: present
+    items:
+      - python3
+      - pipx
+
+  - name: Include pipx package
+    tags:
+      - languages.python
+      - languages
+    when:
+      - facts.os_family == "darwin"
+    include:
+      name: packages/pipx

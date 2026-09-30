@@ -28,6 +28,8 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - uses: ./.github/actions/validate-playbooks
+
       - name: Lint Codebase
         uses: camalot/actions/smells/lint@v1
         with:

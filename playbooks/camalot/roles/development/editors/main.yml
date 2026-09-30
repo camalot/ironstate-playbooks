@@ -1,0 +1,14 @@
+---
+
+tasks:
+  - name: Include VSCode
+    include:
+      name: roles/development/editors/vscode
+    when:
+      - development | enabled("editors", "vscode")
+
+  - name: Include Micro Editor
+    include:
+      name: roles/development/editors/micro
+    when:
+      - development | enabled("editors", "micro")

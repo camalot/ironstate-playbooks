@@ -1,0 +1,14 @@
+---
+
+# OS tasks loaded automatically based on the detected OS family
+
+tasks:
+
+  - name: Install Python (${{ facts.os_family }})
+    tags:
+      - languages.python
+      - languages
+    when:
+      - facts.os_family not in ["debian", "alpine", "archlinux", "ubuntu", "darwin", "windows"]
+    fail:
+      message: "Install Python: Unsupported OS family: ${{ facts.os_family }}"
