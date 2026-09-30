@@ -18,3 +18,9 @@ tasks:
       name: roles/languages/python
     when:
       - languages | enabled('python')
+
+  - name: Include Rust Role
+    include:
+      name: roles/languages/rust
+    when:
+      - languages | enabled('rust')

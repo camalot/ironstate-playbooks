@@ -79,7 +79,7 @@ tasks:
           - not facts.gopath_in_path
         blockinfile:
           create: false
-          dest: ~/.config/powershell/profile.ps1
+          dest: ${{ shell.pwsh.profile | default(env("PROFILE")) }}
           block: |
             if (-not $env:GOPATH) {
               $env:GOPATH = "$HOME/go"

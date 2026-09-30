@@ -1,0 +1,79 @@
+---
+
+tasks:
+  - name: Configure Shell Profiles
+    # description: Configure shell profiles to include the specified path in the environment variable.
+    # inputs:
+    #   name:
+    #     description: The configuration name
+    #     required: true
+    #   bash:
+    #     description: The command block to include in the bash profile.
+    #     required: false
+    #   zsh:
+    #     description: The command block to include in the zsh profile.
+    #     required: false
+    #   fish:
+    #     description: The command block to include in the fish profile.
+    #     required: false
+    #   powershell:
+    #     description: The command block to include in the powershell profile.
+    #     required: false
+    #   nushell:
+    #     description: The command block to include in the nushell profile.
+    #     required: false
+    actions:
+      - name: TEST
+        log:
+          message: "Testing shell profile configuration for ${{ inputs.name }}"
+
+      - name: Configure Shell ${{ inputs.name }} (zsh)
+        when:
+          - facts.shell_zsh
+          - inputs.zsh is defined
+          - inputs.name is defined
+        blockinfile:
+          create: false
+          dest: ~/.zshrc
+          block: ${{ inputs.zsh }}
+
+      - name: Configure Shell ${{ inputs.name }} (bash)
+        when:
+          - facts.shell_bash
+          - inputs.bash is defined
+          - inputs.name is defined
+        blockinfile:
+          create: false
+          dest: ~/.bashrc
+          block: ${{ inputs.bash }}
+
+      - name: Configure Shell ${{ inputs.name }} (fish)
+        when:
+          - facts.shell_fish
+          - inputs.fish is defined
+          - inputs.name is defined
+        blockinfile:
+          create: false
+          dest: ~/.config/fish/config.fish
+          block: ${{ inputs.fish }}
+
+      - name: Configure Shell ${{ inputs.name }} (powershell)
+        when:
+          - facts.shell_powershell
+          - inputs.powershell is defined
+          - inputs.name is defined
+        blockinfile:
+          create: false
+          dest: ${{ shell.pwsh.profile | default(env("PROFILE")) }}
+          block: ${{ inputs.powershell }}
+
+      - name: Configure Shell ${{ inputs.name }} (nushell)
+        when:
+          - facts.shell_nu
+          - inputs.nushell is defined
+          - inputs.name is defined
+        blockinfile:
+          create: false
+          dest: ~/.config/nushell/config.nu
+          block: ${{ inputs.nushell }}
+    

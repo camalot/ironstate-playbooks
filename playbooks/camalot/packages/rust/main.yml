@@ -1,0 +1,69 @@
+---
+
+tasks:
+  - name: Rust Package
+    actions:
+
+      - name: Register Cargo Environment
+        include:
+          name: tasks/shell/path/register
+          with:
+            name: cargo
+            path: ~/.cargo/bin
+            env: PATH
+
+      # - name: Register Cargo Environment (zsh)
+      #   when:
+      #     - facts.shell_zsh
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.zshrc
+      #     block: |
+      #       if test -f "$HOME/.cargo/env"; then
+      #         source "$HOME/.cargo/env"
+      #       fi
+
+      # - name: Register Cargo Environment (bash)
+      #   when:
+      #     - facts.shell_bash
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.bashrc
+      #     block: |
+      #       if test -f "$HOME/.cargo/env"; then
+      #         source "$HOME/.cargo/env"
+      #       fi
+
+      # - name: Register Cargo Environment (fish)
+      #   when:
+      #     - facts.shell_fish
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.config/fish/config.fish
+      #     block: |
+      #       if test -f "$HOME/.cargo/env.fish"; then
+      #         source "$HOME/.cargo/env.fish"
+      #       end
+
+      # - name: Register Cargo Environment (pwsh)
+      #   when:
+      #     - facts.shell_powershell
+      #   blockinfile:
+      #     create: false
+      #     # dest: ${{ shell.pwsh.profile | default(defaults.shell.pwsh.profile) }}
+      #     dest: ${{ shell.pwsh.profile | env("PROFILE") | default("$HOME/.config/powershell/Microsoft.PowerShell_profile.ps1")}}
+      #     block: |
+      #       if (Test-Path "$HOME/.cargo/env.ps1") {
+      #         . "$HOME/.cargo/env.ps1"
+      #       }
+
+      # - name: Register Cargo Environment (nushell)
+      #   when:
+      #     - facts.shell_nu
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.config/nushell/config.nu
+      #     block: |
+      #       if test -f "$HOME/.cargo/env.nu"; then
+      #         source "$HOME/.cargo/env.nu"
+      #       end

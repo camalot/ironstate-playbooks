@@ -2,7 +2,11 @@
 name: 'Validate IronState Playbooks'
 description: 'Validates IronState playbooks'
 
-inputs: {}
+inputs:
+  playbooks-path:
+    description: 'The directory containing the playbooks to validate'
+    required: false
+    default: 'playbooks'
 
 outputs:
   validation_result:
@@ -27,7 +31,7 @@ runs:
           echo "# IronState Playbooks Validation"
           echo
         } >> "$GITHUB_STEP_SUMMARY"
-        for playbook in playbooks/*; do
+        for playbook in ${INPUT_PLAYBOOKS_PATH}/*; do
           [ -d "$playbook" ] || continue
           echo "::group::Validating $playbook"
           exit_code=0

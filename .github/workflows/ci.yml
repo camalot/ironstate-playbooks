@@ -30,6 +30,8 @@ jobs:
           persist-credentials: false
 
       - uses: ./.github/actions/validate-playbooks
+        with:
+          playbooks-path: 'playbooks'
 
       - name: Lint Codebase
         uses: camalot/actions/smells/lint@v1

@@ -6,14 +6,15 @@ vars:
     ui: false
 
   languages:
-    golang: true
-    nodejs: true
-    python: true
+    golang: false
+    nodejs: false
+    python: false
+    rust: true
 
   development:
     editors:
-      vscode: true
-      micro: true
+      vscode: false
+      micro: false
 
 tasks:
 

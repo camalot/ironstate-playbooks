@@ -2,9 +2,20 @@
 
 vars: 
 
-  languages:
-    golang: true
+  wsl:
+    ui: false
 
+  languages:
+    golang: false
+    nodejs: false
+    python: false
+    rust: true
+
+  development:
+    editors:
+      vscode: false
+      micro: false
+      
 tasks:
 
   - name: Include base host configuration

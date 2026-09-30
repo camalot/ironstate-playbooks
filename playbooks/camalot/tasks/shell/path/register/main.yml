@@ -1,0 +1,121 @@
+---
+
+tasks:
+  - name: Register Path In Shells
+    # description: Register a path in various shell environments.
+    # inputs:
+    #   name:
+    #     description: The name of the path being registered.
+    #     required: true
+    #   path:
+    #     description: The path to register in the shell environments.
+    #     required: true
+    #   env:
+    #     description: The name of the environment variable to register the path under.
+    #     required: false
+    #     default: PATH
+
+    actions:
+      - name: Info
+        log:
+          message: "Registering path '${{ inputs.path }}' in environment variable '${{ inputs.env }}' for '${{ inputs.name }}'"
+      - name: Register Path ${{ inputs.name }}
+        when:
+          - inputs.path is defined
+          - inputs.env is defined
+          - inputs.name is defined
+        include:
+          name: tasks/shell/profiles
+          with:
+            name: ${{ inputs.name }}
+            bash: |
+              if [ -z "$${{ inputs.env }}" ] || [[ ":$${{ inputs.env }}:" != *":$${{ inputs.path }}:"* ]]; then
+                export ${{ inputs.env }}=$${{ inputs.env }}:$${{ inputs.path }}
+              fi
+            zsh: |
+              if [ -z "$${{ inputs.env }}" ] || [[ ":$${{ inputs.env }}:" != *":$${{ inputs.path }}:"* ]]; then
+                export ${{ inputs.env }}=$${{ inputs.env }}:$${{ inputs.path }}
+              fi
+            fish: |
+              if not $env:${{ inputs.env }} | str contains ${{ inputs.path }} {
+                set -x ${{ inputs.env }} ${{ inputs.path }}
+              }
+            powershell: |
+              if (-not $env:${{ inputs.env }}.Contains("$env:${{ inputs.path }}")) {
+                  $env:${{ inputs.env }} = "$env:${{ inputs.env }};$env:${{ inputs.path }}"
+                }
+            nushell: |
+              if not $env:${{ inputs.env }} | str contains ${{ inputs.path }} {
+                set -x ${{ inputs.env }} ${{ inputs.path }}
+              }
+
+
+      # - name: Register Path ${{ inputs.name }} (zsh)
+      #   when:
+      #     - facts.shell_zsh
+      #     - inputs.path is defined
+      #     - inputs.env is defined
+      #     - inputs.name is defined
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.zshrc
+      #     block: |
+      #       if [ -z "$${{ inputs.env }}" ] || [[ ":$${{ inputs.env }}:" != *":$${{ inputs.path }}:"* ]]; then
+      #         export ${{ inputs.env }}=$${{ inputs.env }}:$${{ inputs.path }}
+      #       fi
+
+      # - name: Register Path ${{ inputs.name }} (bash)
+      #   when:
+      #     - facts.shell_bash
+      #     - inputs.path is defined
+      #     - inputs.env is defined
+      #     - inputs.name is defined
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.bashrc
+      #     block: |
+      #       if [ -z "$${{ inputs.env }}" ] || [[ ":$${{ inputs.env }}:" != *":$${{ inputs.path }}:"* ]]; then
+      #         export ${{ inputs.env }}=$${{ inputs.env }}:$${{ inputs.path }}
+      #       fi
+
+      # - name: Register Path ${{ inputs.name }} (fish)
+      #   when:
+      #     - facts.shell_fish
+      #     - inputs.path is defined
+      #     - inputs.env is defined
+      #     - inputs.name is defined
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.config/fish/config.fish
+      #     block: |
+      #       if not $env:${{ inputs.env }} | str contains ${{ inputs.path }} {
+      #         set -x ${{ inputs.env }} ${{ inputs.path }}
+      #       }
+
+      # - name: Register Path ${{ inputs.name }} (powershell)
+      #   when:
+      #     - facts.shell_powershell
+      #     - inputs.path is defined
+      #     - inputs.env is defined
+      #     - inputs.name is defined
+      #   blockinfile:
+      #     create: false
+      #     dest: ${{ shell.pwsh.profile | default(env("PROFILE")) }}
+      #     block: |
+      #       if (-not $env:${{ inputs.env }}.Contains("$env:${{ inputs.path }}")) {
+      #           $env:${{ inputs.env }} = "$env:${{ inputs.env }};$env:${{ inputs.path }}"
+      #         }
+
+      # - name: Register Path ${{ inputs.name }} (nushell)
+      #   when:
+      #     - facts.shell_nu
+      #     - inputs.path is defined
+      #     - inputs.env is defined
+      #     - inputs.name is defined
+      #   blockinfile:
+      #     create: false
+      #     dest: ~/.config/nushell/config.nu
+      #     block: |
+      #       if not $env:${{ inputs.env }} | str contains ${{ inputs.path }} {
+      #         set -x ${{ inputs.env }} ${{ inputs.path }}
+      #       }

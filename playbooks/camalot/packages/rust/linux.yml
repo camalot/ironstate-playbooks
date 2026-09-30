@@ -1,0 +1,19 @@
+---
+
+# this is for debian based systems
+
+tasks:
+  - name: Rust Installation (${{ facts.os_family }})
+    when:
+      - facts.is_debian is defined and facts.is_debian
+    actions:
+      - name: Install RustUp (${{ facts.os_family }})
+        apt:
+          name: rustup
+          state: ${{ package.state }}
+        become: true
+
+      - name: RustUp (${{ facts.os_family }})
+        shell:
+          type: bash
+          command: rustup default stable

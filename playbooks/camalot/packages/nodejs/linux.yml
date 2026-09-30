@@ -9,6 +9,7 @@ tasks:
     become: true
     when:
       - facts.is_debian
+      - facts.os_family is not 'debian' # covered by the debian file auto inclusion
     items:
       - nodejs
       - npm
