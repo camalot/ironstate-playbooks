@@ -14,4 +14,3 @@ tasks:
         - facts.local_bin_path | exists
       fail_msg: "Local bin path fact is not defined or empty. Please define 'vars.local.bin_path' in your inventory or host vars."
       success_msg: "Local bin path fact is defined and valid. Path: ${{ facts.local_bin_path }}"
-

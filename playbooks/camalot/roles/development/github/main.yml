@@ -120,5 +120,5 @@ tasks:
       comment_template: "Enterprise: {host} (orgs: {orgs})"
       defaults:
         user: git
-        identities_only: yes
+        identities_only: 'yes' # yaml-lint disable truthy
       hosts: ${{ github.enterprise | default([]) }}

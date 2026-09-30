@@ -49,7 +49,7 @@ vars:
         user: someuser
         identity_files:
           - ~/.ssh/id_rsa
-        identities_only: yes
+        identities_only: yes # yaml-lint disable truthy
         # ... 
         # other ssh host configuration options can be added here as needed
         # use snake_case for keys and values, and use underscores for multi-word keys
