@@ -19,6 +19,8 @@ runs:
       uses: camalot/xget-action@v1
       with:
         package: TacoContent/ironstate
+        ignore: |
+          .sbom.json
 
     - name: Validate IronState Playbooks
       shell: bash
