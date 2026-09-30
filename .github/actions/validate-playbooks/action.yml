@@ -31,7 +31,7 @@ runs:
           [ -d "$playbook" ] || continue
           echo "::group::Validating $playbook"
           exit_code=0
-          result=$(ironstate validate --no-color --playbook="$playbook" 2>&1) || exit_code=$?
+          result=$(ironstate validate --playbook="$playbook" 2>&1) || exit_code=$?
           echo "$result"
           echo "::endgroup::"
           if [ "$exit_code" -ne 0 ]; then
