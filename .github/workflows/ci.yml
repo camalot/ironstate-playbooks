@@ -9,6 +9,7 @@ on: # yamllint disable-line rule:truthy
   pull_request:
     paths:
       - 'playbooks/**'
+  workflow_dispatch:
 permissions: {}
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

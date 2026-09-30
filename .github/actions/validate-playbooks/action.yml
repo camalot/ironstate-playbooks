@@ -2,11 +2,7 @@
 name: 'Validate IronState Playbooks'
 description: 'Validates IronState playbooks'
 
-inputs:
-  path:
-    description: 'Name of the playbook to validate'
-    required: false
-    default: 'playbooks'
+inputs: {}
 
 outputs:
   validation_result:
