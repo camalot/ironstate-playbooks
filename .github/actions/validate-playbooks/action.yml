@@ -29,7 +29,7 @@ runs:
         for playbook in playbooks/*; do
           if [ -d "$playbook" ]; then
             echo "Validating $playbook"
-            result=$(ironstate validate --playbook="playbooks/$playbook")
+            result=$(ironstate validate --playbook="$playbook")
             exit_code=$?
             echo "$result"
             if [ $exit_code -ne 0 ]; then
