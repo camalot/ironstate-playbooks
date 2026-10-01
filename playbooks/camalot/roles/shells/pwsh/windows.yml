@@ -1,0 +1,44 @@
+---
+
+tasks:
+
+  - name: Install Microsoft.PowerShell
+    tags:
+      - shells
+      - shells.pwsh
+    when:
+      - facts.os_family == 'windows'
+    winget:
+      package: Microsoft.PowerShell
+      source: winget
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+
+  - name: Install Microsoft.Coreutils
+    tags:
+      - shells
+      - shells.pwsh
+    when:
+      - facts.os_family == 'windows'
+    winget:
+      package: Microsoft.Coreutils
+      source: winget
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+
+  - name: Import Chocolatey Profile
+    when:
+      - shells | enabled('pwsh', "chocolatey")
+      - facts.os_family == "windows"
+    blockinfile:
+      create: true
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+      dest: "${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}"
+      block: |
+        # Import the Chocolatey Profile that contains the necessary code to enable
+        # tab-completions to function for `choco`.
+        # Be aware that if you are missing these lines from your profile, tab completion
+        # for `choco` will not function.
+        # See https://ch0.co/tab-completion for details.
+        $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+        if (Test-Path($ChocolateyProfile)) {
+          Import-Module "$ChocolateyProfile"
+        }

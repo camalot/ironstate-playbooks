@@ -17,7 +17,7 @@ tasks:
       state: present
     when: rustc.rc != 0 or cargo.rc != 0
 
-  - name: Register cargo bin paths
+  - name: Register Cargo Environment
     path:
       paths:
         - ~/.cargo/bin

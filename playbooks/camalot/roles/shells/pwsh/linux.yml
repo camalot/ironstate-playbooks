@@ -1,0 +1,38 @@
+---
+
+tasks:
+  - name: Install pwsh Requirements (${{ facts.os_family }})
+    when:
+      - facts.is_debian
+      - facts.os_family != 'ubuntu'
+    become: true
+    apt:
+      update_cache: true
+      package: wget
+      state: present
+
+  - name: Install pwsh (${{ facts.os_family }})
+    when:
+      - facts.is_debian
+      - facts.os_family != 'ubuntu'
+    become: true
+    shell:
+      type: bash
+      command: |
+        set -euo pipefail
+        export DEBIAN_FRONTEND=noninteractive
+        source /etc/os-release
+        wget -q https://packages.microsoft.com/config/debian/$VERSION_ID/packages-microsoft-prod.deb
+        # Register the Microsoft repository GPG keys
+        sudo dpkg -i packages-microsoft-prod.deb
+        # Delete the Microsoft repository GPG keys file
+        rm packages-microsoft-prod.deb
+
+  - name: Install pwsh (${{ facts.os_family }})
+    when:
+      - facts.is_debian
+      - facts.os_family != 'ubuntu'
+    become: true
+    apt:
+      package: powershell
+      state: present

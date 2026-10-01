@@ -1,0 +1,53 @@
+---
+
+tasks:
+
+  - name: Install Nano (${{ facts.os_family }})
+    apt:
+      package: nano
+      state: ${{ package.state }}
+    become: true
+    tags:
+      - development
+      - development.editors
+      - development.editors.nano
+    when:
+      - development | enabled('editors', 'nano')
+      - facts.is_debian
+
+  - name: Install Nano (${{ facts.os_family }})
+    apk:
+      name: nano
+      state: ${{ package.state }}
+    tags:
+      - development
+      - development.editors
+      - development.editors.nano
+    when:
+      - development | enabled('editors', 'nano')
+      - facts.os_family == "alpine"
+
+  - name: Install Nano (${{ facts.os_family }})
+    pacman:
+      name: nano
+      state: ${{ package.state }}
+    become: true
+    tags:
+      - development
+      - development.editors
+      - development.editors.nano
+    when:
+      - development | enabled('editors', 'nano')
+      - facts.os_family == "archlinux"
+
+  - name: Install Nano (${{ facts.os_family }})
+    brew:
+      name: nano
+      state: ${{ package.state }}
+    tags:
+      - development
+      - development.editors
+      - development.editors.nano
+    when:
+      - development | enabled('editors', 'nano')
+      - facts.os_family == "darwin"

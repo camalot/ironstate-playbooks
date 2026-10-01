@@ -23,9 +23,6 @@ tasks:
     #     description: The command block to include in the nushell profile.
     #     required: false
     actions:
-      - name: TEST
-        log:
-          message: "Testing shell profile configuration for ${{ inputs.name }}"
 
       - name: Configure Shell ${{ inputs.name }} (zsh)
         when:
@@ -59,12 +56,12 @@ tasks:
 
       - name: Configure Shell ${{ inputs.name }} (powershell)
         when:
-          - facts.shell_powershell
+          - facts.shell_pwsh
           - inputs.powershell is defined
           - inputs.name is defined
         blockinfile:
           create: false
-          dest: ${{ shell.pwsh.profile | default(env("PROFILE")) }}
+          dest: ${{ shells.pwsh.profile | default(facts.pwsh_profile) | default("~/.config/powershell/Microsoft.PowerShell_profile.ps1") }}
           block: ${{ inputs.powershell }}
 
       - name: Configure Shell ${{ inputs.name }} (nushell)

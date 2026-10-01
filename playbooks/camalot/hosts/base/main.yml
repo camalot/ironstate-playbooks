@@ -1,6 +1,13 @@
 ---
 
-vars: {}
+vars: 
+
+  shells:
+    zoxide: true
+    pwsh:
+      omp:
+        profile: "~/.config/powershell/default.omp.json"
+      profile: "~/.config/powershell/profile.ps1"
 
 tasks:
 
@@ -23,3 +30,13 @@ tasks:
       name: roles/development
     when:
       - development | enabled()
+
+  - name: Include Shells Role
+    include:
+      name: roles/shells
+    when:
+      - shells | enabled()
+
+  - name: Include Powershell Facts
+    include:
+      name: tasks/shell/pwsh/facts

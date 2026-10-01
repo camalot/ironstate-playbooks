@@ -28,6 +28,22 @@ tasks:
           name: gopath_in_path
           value: ${{ (facts.os_path_separator | concat("", env("PATH")) | concat("", facts.os_path_separator)) | contains(facts.os_path_separator | concat("", facts.GOBIN | default("???NOMATCH???")) | concat("", facts.os_path_separator)) }}
 
+      # - name: Register GoHome Environment
+      #   include:
+      #     name: tasks/shell/path/register
+      #     with:
+      #       name: GOPATH
+      #       path: $HOME/go
+      #       env: GOPATH
+
+      # - name: Register GOBIN Environment
+      #   include:
+      #     name: tasks/shell/path/register
+      #     with:
+      #       name: GOBIN
+      #       path: ${{ facts.GOBIN | default("$HOME/go/bin") }}
+      #       env: PATH
+
       - name: Register GoPath (zsh)
         when:
           - facts.shell_zsh
@@ -75,16 +91,18 @@ tasks:
 
       - name: Register GoPath (powershell)
         when:
-          - facts.shell_powershell
+          - facts.shell_pwsh
           - not facts.gopath_in_path
         blockinfile:
           create: false
-          dest: ${{ shell.pwsh.profile | default(env("PROFILE")) }}
+          dest: ${{ shells.pwsh.profile | default((facts.platform == "windows") | ternary("~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1", "~/.config/powershell/Microsoft.PowerShell_profile.ps1")) }}
           block: |
             if (-not $env:GOPATH) {
-              $env:GOPATH = "$HOME/go"
-              if (-not $env:PATH.Contains("$env:GOPATH/bin")) {
-                $env:PATH = "$env:PATH;$env:GOPATH/bin"
+              $env:GOPATH = Join-Path $HOME 'go'
+              $goBin = [IO.Path]::GetFullPath((Join-Path $env:GOPATH 'bin')).TrimEnd([IO.Path]::DirectorySeparatorChar)
+              $pathEntries = @($env:PATH -split [IO.Path]::PathSeparator | Where-Object { $_ } | ForEach-Object { [IO.Path]::GetFullPath($_).TrimEnd([IO.Path]::DirectorySeparatorChar) })
+              if ($pathEntries -notcontains $goBin) {
+                $env:PATH = (@($env:PATH) + $goBin | Where-Object { $_ }) -join [IO.Path]::PathSeparator
               }
             }
 

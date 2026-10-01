@@ -1,0 +1,16 @@
+---
+tasks:
+
+  - name: Install Nano Shim
+    tags:
+      - development
+      - development.editors
+      - development.editors.nano
+    when:
+      - development | enabled('editors', 'nano')
+      - facts.os_family == 'windows'
+    include:
+      name: tasks/wsl-shim
+      state: ${{ development | enabled('editors', 'nano') | ternary('present', 'absent') }}
+      with:
+        command: nano

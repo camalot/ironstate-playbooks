@@ -1,0 +1,15 @@
+---
+
+tasks:
+
+  - name: Include Zoxide
+    include:
+      name: packages/zoxide
+    when:
+      - shells | enabled('zoxide')
+
+  - name: Include PowerShell
+    include:
+      name: roles/shells/pwsh
+    when:
+      - shells | enabled('pwsh')

@@ -9,7 +9,7 @@ tasks:
           name: tasks/shell/path/register
           with:
             name: cargo
-            path: ~/.cargo/bin
+            path: $HOME/.cargo/bin
             env: PATH
 
       # - name: Register Cargo Environment (zsh)
@@ -50,8 +50,8 @@ tasks:
       #     - facts.shell_powershell
       #   blockinfile:
       #     create: false
-      #     # dest: ${{ shell.pwsh.profile | default(defaults.shell.pwsh.profile) }}
-      #     dest: ${{ shell.pwsh.profile | env("PROFILE") | default("$HOME/.config/powershell/Microsoft.PowerShell_profile.ps1")}}
+      #     # dest: ${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}
+      #     dest: ${{ shells.pwsh.profile | env("PROFILE") | default("$HOME/.config/powershell/Microsoft.PowerShell_profile.ps1")}}
       #     block: |
       #       if (Test-Path "$HOME/.cargo/env.ps1") {
       #         . "$HOME/.cargo/env.ps1"

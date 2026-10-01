@@ -1,0 +1,11 @@
+---
+
+tasks:
+
+  - name: Powershell $PROFILE
+    fact:
+      name: pwsh_profile
+      shell: 
+        type: pwsh
+        command: $PROFILE
+      value: ${{ stdout | trim() }}

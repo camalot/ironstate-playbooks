@@ -1,0 +1,48 @@
+---
+
+tasks:
+  - name: Ensure fish directory exists
+    file:
+      path: "~/.config/fish"
+      state: directory
+      mode: "0755"
+
+  - name: Copy fish configuration files
+    copy:
+      src: files/custom
+      dest: "~/.config/fish/custom"
+      mode: "0644"
+
+
+# - name: manage ~/.config/fish/conf.d/custom_loader.fish
+#   ansible.builtin.copy:
+#     content: |
+#       # ANSIBLE MANAGED — fish custom dir loader
+#       set custom_types aliases exports functions sources
+#       for src in $custom_types
+#         if test -d "$HOME/.config/fish/custom/$src"
+#           for file in "$HOME/.config/fish/custom/$src"/*.fish
+#             test -r "$file" && source "$file"
+#           end
+#         end
+#       end
+#     dest: "{{ target_home }}/.config/fish/conf.d/custom_loader.fish"
+#     mode: "0644"
+#     owner: "{{ target_user }}"
+#     force: false
+#     backup: true
+
+# - name: fish — detect installed path
+#   ansible.builtin.shell: command -v fish
+#   register: fish_bin
+#   changed_when: false
+#   failed_when: fish_bin.rc != 0
+
+# - name: fish — set as default shell for {{ target_user }}
+#   ansible.builtin.user:
+#     name: "{{ target_user }}"
+#     shell: "{{ fish_bin.stdout }}"
+#   become: true
+#   when:
+#     - shells.default | default('') == 'fish'
+#     - ansible_facts['user_shell'] | default('') != fish_bin.stdout

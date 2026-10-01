@@ -9,12 +9,20 @@ vars:
     golang: false
     nodejs: false
     python: false
-    rust: true
+    rust: false
 
   development:
     editors:
       vscode: false
-      micro: false
+      micro: true
+      nano: true
+
+  shells:
+    zoxide: true
+    pwsh:
+      omp:
+        profile: "~/.config/powershell/default.omp.json"
+      profile: "~/.config/powershell/profile.ps1"
 
 tasks:
 

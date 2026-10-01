@@ -1,0 +1,136 @@
+---
+
+vars:
+
+  defaults:
+    shells:
+      pwsh:
+        omp:
+          profile: "~/.config/powershell/default.omp.json"
+        profile: "~/.config/powershell/Microsoft.PowerShell_profile.ps1"
+
+tasks:
+  
+
+  - name: PowerShell System Profile Path Fact
+    fact:
+      name: pwsh_profile_path
+      # WHY is facts.pwsh_profile <nil>???
+      value: "${{ facts.pwsh_profile | dirname | default('~/.config/powershell/profile.ps1') | dirname }}"
+
+  - name: PowerShell User Defined Profile Path Fact
+    fact:
+      name: pwsh_user_profile_path
+      value: "${{ shells.pwsh.profile | default(facts.pwsh_profile) | dirname }}"
+
+  - name: oh-my-posh profile path fact
+    fact:
+      name: oh_my_posh_profile_path
+      value: "${{ shells.pwsh.omp.profile | default(facts.pwsh_profile_path | join('default.omp.json')) }}"
+
+  - name: PowerShell User Defined Profile Fact
+    fact:
+      name: pwsh_user_profile
+      value: "${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}"
+
+  - name: Register User Profile
+    tags:
+      - shells
+      - shells.pwsh
+    blockinfile:
+      create: false
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+      insertafter: EOF
+      dest: "${{ facts.pwsh_profile }}"
+      block: |
+        $PROFILE_PATH = "${{ facts.pwsh_user_profile | resolve }}"
+        if (Test-Path $PROFILE_PATH) {
+          . $PROFILE_PATH
+        }
+
+  - name: Import PowerShell Modules
+    blockinfile:
+      create: true
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+      insertbefore: BOF
+      dest: "${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}"
+      block: |
+        Write-Output "Loading Profile from $PROFILE";
+        $env:VIRTUAL_ENV_DISABLE_PROMPT = 1;
+        $modules = @(
+          "posh-git",
+          "Terminal-Icons"
+        );
+        $modules | ForEach-Object {
+          if ( !(Get-Module -ListAvailable -Name "$_") ) {
+            Install-Module $_ -Scope CurrentUser -Force;
+          }
+        };
+        $modules | ForEach-Object { Import-Module -Name $_; }
+
+  - name: Configure PowerShell Host Colors
+    blockinfile:
+      create: true
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+      dest: "${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}"
+      block: |
+
+        $host.privatedata.ErrorForegroundColor = 'Magenta';
+        $host.privatedata.ErrorBackgroundColor = 'Black';
+        $host.privatedata.WarningForegroundColor = 'Yellow';
+        $host.privatedata.WarningBackgroundColor = 'Black';
+        $host.privatedata.DebugForegroundColor = 'DarkGray';
+        $host.privatedata.DebugBackgroundColor = 'Black';
+        $host.privatedata.VerboseForegroundColor = 'White';
+        $host.privatedata.VerboseBackgroundColor = 'Black';
+        $host.privatedata.ProgressForegroundColor = 'DarkBlue';
+        $host.privatedata.ProgressBackgroundColor = 'DarkCyan';
+
+  - name: Load Custom PowerShell Source Files
+    blockinfile:
+      create: false
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+      dest: "${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}"
+      block: |
+        # Load custom shell extensions from ${{ facts.pwsh_user_profile_path }}/custom/<category>/*.ps1
+        foreach ($category in @("aliases", "exports", "functions", "sources")) {
+          $customDir = Join-Path "${{ facts.pwsh_user_profile_path }}" "custom/$category"
+          if (Test-Path $customDir) {
+            Get-ChildItem -Path $customDir -Filter *.ps1 -File | ForEach-Object {
+              . $_.FullName
+            }
+          }
+        }
+
+  - name: Install Oh-My-Posh
+    xget:
+      package: JanDeDobbeleer/oh-my-posh
+      state: ${{ shells.pwsh | enabled('omp') | ternary('present', 'absent') }}
+      args:
+        - --to=${{ facts.local_bin_path | join('oh-my-posh') | extension('exe') }}
+        - --upgrade-only
+        - --non-interactive
+
+  - name: Copy Oh-My-Posh Configuration
+    copy:
+      src: "files/.config/powershell/default.omp.json"
+      dest: "${{ shells.pwsh.omp.profile | default(facts.oh_my_posh_profile_path) }}"
+      state: ${{ shells.pwsh | enabled('omp') | ternary('present', 'absent') }}
+
+  - name: Copy Custom PowerShell Files
+    copy:
+      src: "files/.config/powershell/custom/"
+      dest: "${{ facts.pwsh_user_profile_path }}/custom/"
+      state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+
+  - name: Oh-My-Posh Profile
+    blockinfile:
+      # Do not create the profile file if it does not exist. Fail the task instead.
+      create: false
+      state: ${{ shells.pwsh | enabled('omp') | ternary('present', 'absent') }}
+      dest: "${{ shells.pwsh.profile | default(facts.pwsh_profile) }}"
+      insertbefore: EOF
+      block: |
+        if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+          oh-my-posh init pwsh --config "${{ shells.pwsh.omp.profile | default(defaults.shells.pwsh.omp.profile) }}" | Invoke-Expression
+        }

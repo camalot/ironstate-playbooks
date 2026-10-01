@@ -12,3 +12,9 @@ tasks:
       name: roles/development/editors/micro
     when:
       - development | enabled("editors", "micro")
+
+  - name: Include Nano Editor
+    include:
+      name: roles/development/editors/nano
+    when:
+      - development | enabled("editors", "nano")

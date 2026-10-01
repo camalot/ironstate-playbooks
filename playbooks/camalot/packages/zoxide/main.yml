@@ -1,0 +1,35 @@
+---
+
+tasks:
+
+  - name: Zoxide
+    xget:
+      package: ajeetdsouza/zoxide
+      state: ${{ shells | enabled('zoxide') | ternary('present', 'absent') }}
+      args:
+        - --to=${{ facts.local_bin_path | join('zoxide') | extension('exe') }}
+    tags:
+      - shells
+      - shells.zoxide
+
+  - name: Create Zoxide (z) Symlink
+    symlinks:
+      dest: "${{ facts.local_bin_path | join('z') | extension('exe') }}"
+      src: "${{ facts.local_bin_path | join('zoxide') | extension('exe') }}"
+    tags:
+      - shells
+      - shells.zoxide
+
+  # TODO: Add zoxide configuration for other shells (e.g., bash, zsh)
+  - name: Configure Zoxide
+    blockinfile:
+      create: false
+      state: ${{ shells | enabled('zoxide') | ternary('present', 'absent') }}
+      dest: "${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}"
+      block: |
+        if (Get-Command zoxide -ErrorAction SilentlyContinue) {
+          Invoke-Expression (& { ( zoxide init powershell | Out-String ) })
+        }
+    tags:
+      - shells
+      - shells.zoxide
