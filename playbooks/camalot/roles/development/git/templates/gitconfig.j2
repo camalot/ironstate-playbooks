@@ -1,5 +1,7 @@
 [alias]
 
+  whoami = !"echo \"$(git config user.name) <$(git config user.email)>\""
+
   # View abbreviated SHA, description, and history graph of the latest 20 commits
   l = log --pretty=oneline -n 20 --graph --abbrev-commit
 

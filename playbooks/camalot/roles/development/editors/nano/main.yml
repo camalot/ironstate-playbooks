@@ -1,3 +1,9 @@
 ---
 
-tasks: []
+tasks:
+
+  - name: Include Nano Package
+    include:
+      name: packages/nano
+    when:
+      - development | enabled('editors', 'nano')

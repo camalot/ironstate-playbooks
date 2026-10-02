@@ -11,7 +11,7 @@ tasks:
       package: wget
       state: present
 
-  - name: Install pwsh (${{ facts.os_family }})
+  - name: Install Microsoft repository GPG keys (${{ facts.os_family }})
     when:
       - facts.is_debian
       - facts.os_family != 'ubuntu'

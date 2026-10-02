@@ -1,0 +1,13 @@
+set constantshow
+set mouse
+set smarthome
+
+set linenumbers      # Enable line numbers sidebar
+set autoindent       # Match indentation of previous line
+set tabsize 2        # Set visible width of a tab to 2 spaces
+set tabstospaces     # Convert typed tabs into spaces
+set softwrap         # Wrap long lines visually instead of letting them run off-screen
+
+# unset breaklonglines
+
+include "/usr/share/nano/*.nanorc"

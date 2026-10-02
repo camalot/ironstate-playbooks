@@ -1,0 +1,44 @@
+# ~/.nanorc - Dracula Theme Configuration
+
+# ------------------------------------------------------------------------------
+# Dracula Interface Color Layout
+# ------------------------------------------------------------------------------
+# nano has no support for 6-digit #RRGGBB hex; colors below are rounded to
+# nano's 3-digit #RGB shorthand (one hex digit per channel) and only render
+# when the terminal reports 256 colors (COLORS == 256).
+
+# Title Bar: Dracula Purple background with White text
+set titlecolor #ffe,#b9f
+
+# Line Numbers: Subtle Comment Blue/Gray
+set numbercolor #67a
+
+# Status Bar (bottom error/info alerts): Dracula Pink background
+set statuscolor #ffe,#f7c
+
+# Key Bindings Layout Grid (help text): Dracula Cyan
+set keycolor #8ef
+
+# Command Function Names: Dracula Green
+set functioncolor #5f7
+
+# Selected Text Highlight: Dracula Selection Gray
+set selectedcolor #ffe,#445
+
+# Mini-buffer / Prompt inputs: Dracula Orange
+set promptcolor #ffe,#fb6
+set minicolor #fb6
+
+# ------------------------------------------------------------------------------
+# General Editor Preferences
+# ------------------------------------------------------------------------------
+set linenumbers      # Enable line numbers sidebar
+set autoindent       # Match indentation of previous line
+set tabsize 2        # Set visible width of a tab to 2 spaces
+set tabstospaces     # Convert typed tabs into spaces
+set softwrap         # Wrap long lines visually instead of letting them run off-screen
+
+# ------------------------------------------------------------------------------
+# Core Syntax Highlighting (Optional - Includes system rules)
+# ------------------------------------------------------------------------------
+include "/usr/share/nano/*.nanorc"
