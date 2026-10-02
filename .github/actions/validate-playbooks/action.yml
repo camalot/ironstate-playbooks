@@ -24,6 +24,8 @@ runs:
 
     - name: Validate IronState Playbooks
       shell: bash
+      env:
+        INPUT_PLAYBOOKS_PATH: ${{ inputs.playbooks-path }}
       run: |
         set -uo pipefail
         status_exit=0
