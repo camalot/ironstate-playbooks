@@ -39,6 +39,8 @@ tasks:
       - development
     items: ${{ vars.git.profiles | default([]) }}
     template:
+      create: true
+      force: true
       src: templates/gitconfig.profile.j2
       dest: ~/.gitconfig-${{ item.name }}
       engine: jinja
