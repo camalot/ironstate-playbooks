@@ -13,3 +13,9 @@ tasks:
       name: roles/shells/pwsh
     when:
       - shells | enabled('pwsh')
+
+  - name: Include Zsh
+    include:
+      name: roles/shells/zsh
+    when:
+      - shells | enabled('zsh')

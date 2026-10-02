@@ -9,8 +9,10 @@ tasks:
     when:
       - development | enabled('editors', 'nano')
       - facts.os_family == 'windows'
+      - facts.wsl_installed | default(false)
     include:
       name: tasks/wsl-shim
       state: ${{ development | enabled('editors', 'nano') | ternary('present', 'absent') }}
       with:
         command: nano
+        name: nano

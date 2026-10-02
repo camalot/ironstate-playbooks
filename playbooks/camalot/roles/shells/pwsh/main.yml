@@ -10,7 +10,6 @@ vars:
         profile: "~/.config/powershell/Microsoft.PowerShell_profile.ps1"
 
 tasks:
-  
 
   - name: PowerShell System Profile Path Fact
     fact:

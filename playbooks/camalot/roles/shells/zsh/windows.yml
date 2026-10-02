@@ -1,0 +1,29 @@
+---
+tasks:
+
+  - name: Check for zsh in WSL
+    tags:
+      - shells
+      - shells.zsh
+    when:
+      - facts.os_family == 'windows'
+      - facts.wsl_installed | default(false)
+    facts:
+      id: zsh_exists
+      shell:
+        type: pwsh
+        command: '& wsl -- command -v zsh'
+      value: true
+
+  - name: Create zsh shim to wsl zsh
+    tags:
+      - shells
+      - shells.zsh
+    when:
+      - facts.os_family == 'windows'
+      - facts.wsl_installed | default(false)
+    include:
+      name: tasks/wsl-shim
+      with:
+        command: wsl -- zsh 
+        name: zsh

@@ -1,6 +1,17 @@
 ---
 
 vars: 
+  user:
+    paths:
+      development:
+        work: 
+          windows: D:/Development/work/
+          wsl: /mnt/d/Development/work/
+          default: ~/Development/work/
+        oss:
+          windows: D:/Development/projects/
+          wsl: /mnt/d/Development/projects/
+          default: ~/Development/oss/
 
   wsl:
     ui: false
@@ -19,6 +30,7 @@ vars:
 
   shells:
     zoxide: true
+    zsh: true
     pwsh:
       omp:
         profile: "~/.config/powershell/default.omp.json"
