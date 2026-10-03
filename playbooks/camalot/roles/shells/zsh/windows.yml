@@ -9,7 +9,7 @@ tasks:
       - facts.os_family == 'windows'
       - facts.wsl_installed | default(false)
     fact:
-      id: zsh_exists
+      name: zsh_exists
       shell:
         type: pwsh
         command: '& wsl -- command -v zsh'
