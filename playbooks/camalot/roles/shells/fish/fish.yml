@@ -4,7 +4,7 @@ tasks:
   - name: Ensure fish directory exists
     file:
       path: "~/.config/fish"
-      state: directory
+      type: directory
       mode: "0755"
 
   - name: Copy fish configuration files

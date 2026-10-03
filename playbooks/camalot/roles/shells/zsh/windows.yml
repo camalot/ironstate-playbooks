@@ -8,7 +8,7 @@ tasks:
     when:
       - facts.os_family == 'windows'
       - facts.wsl_installed | default(false)
-    facts:
+    fact:
       id: zsh_exists
       shell:
         type: pwsh

@@ -4,16 +4,16 @@ tasks:
 
   - name: Install Git
     tags:
-      - git
       - development
+      - development.git
     winget:
       package: Git.Git
       state: present
 
   - name: Install Delta
     tags:
-      - git
       - development
+      - development.git
     xget:
       package: dandavison/delta
       state: present
@@ -23,8 +23,8 @@ tasks:
 
   - name: Render global gitconfig
     tags: 
-      - git
       - development
+      - development.git
     blockinfile:
       create: true
       template:
@@ -35,12 +35,14 @@ tasks:
 
   - name: Render per-profile gitconfig
     tags: 
-      - git
       - development
+      - development.git
     items: ${{ vars.git.profiles | default([]) }}
     template:
-      create: true
-      force: true
+      # TODO: Consider using blockinfile instead of template for per-profile gitconfig
+      # also consider allowing create / force for per-profile gitconfig
+      # create: true
+      # force: true
       src: templates/gitconfig.profile.j2
       dest: ~/.gitconfig-${{ item.name }}
       engine: jinja
@@ -49,8 +51,8 @@ tasks:
 
   - name: Render enterprise gitconfig
     tags: 
-      - git
       - development
+      - development.git
     when: github.enterprise is defined
     blockinfile:
       template:
