@@ -6,3 +6,9 @@ tasks:
       name: roles/development/editors
     when:
       - development | enabled("editors")
+
+  - name: Include Git
+    include:
+      name: roles/development/git
+    when:
+      - development | enabled("git")

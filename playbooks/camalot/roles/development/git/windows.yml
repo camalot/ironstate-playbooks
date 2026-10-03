@@ -1,0 +1,10 @@
+---
+tasks:
+
+  - name: Install Git
+    tags:
+      - development
+      - development.git
+    winget:
+      package: Git.Git
+      state: ${{ development | enabled("git") | ternary("present", "absent") }}

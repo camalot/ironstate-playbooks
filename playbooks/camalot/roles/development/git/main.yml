@@ -2,13 +2,6 @@
 
 tasks:
 
-  - name: Install Git
-    tags:
-      - development
-      - development.git
-    winget:
-      package: Git.Git
-      state: present
 
   - name: Install Delta
     tags:
@@ -16,7 +9,7 @@ tasks:
       - development.git
     xget:
       package: dandavison/delta
-      state: present
+      state: ${{ development | enabled("git") | ternary("present", "absent") }}
       args:
         - --to=${{ facts.local_bin_path | join("delta") | extension("exe") }}
         - --upgrade-only
