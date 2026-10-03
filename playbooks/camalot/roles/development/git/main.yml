@@ -2,6 +2,9 @@
 
 tasks:
 
+  - name: LOG
+    log:
+      message: '${{ concat("enabled: ", development | enabled("git")) }}'
 
   - name: Install Delta
     tags:
