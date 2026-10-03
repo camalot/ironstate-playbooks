@@ -1,14 +1,6 @@
 ---
-tasks:
 
-  - name: Install Git
-    tags:
-      - git
-      - development
-      - development.git
-    winget:
-      package: Git.Git
-      state: ${{ git | enabled() | ternary("present", "absent") }}
+tasks:
 
   - name: Install Delta
     tags:
@@ -22,8 +14,25 @@ tasks:
         - --to=${{ facts.local_bin_path | join("delta") | extension("exe") }}
         - --ignore=.sbom.json
         - --ignore=musl
-        - --asset=.zip
+        - --asset=.tar.gz
         - --upgrade-only
     when:
       - git | enabled()
-      - facts.os_family == 'windows'
+      - facts.os_family != 'alpine'
+
+  - name: Install Delta
+    tags:
+      - git
+      - development
+      - development.git
+    xget:
+      package: dandavison/delta
+      state: ${{ git | enabled() | ternary("present", "absent") }}
+      args:
+        - --to=${{ facts.local_bin_path | join("delta") | extension("exe") }}
+        - --ignore=.sbom.json
+        - --asset=.tar.gz
+        - --upgrade-only
+    when:
+      - git | enabled()
+      - facts.os_family == 'alpine'

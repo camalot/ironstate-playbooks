@@ -5,19 +5,9 @@ tasks:
   # git settings are under vars.git
   
 
-  - name: Install Delta
-    tags:
-      - development
-      - development.git
-    xget:
-      package: dandavison/delta
-      state: ${{ git | enabled() | ternary("present", "absent") }}
-      args:
-        - --to=${{ facts.local_bin_path | join("delta") | extension("exe") }}
-        - --upgrade-only
-
   - name: Render global gitconfig
     tags: 
+      - git
       - development
       - development.git
     blockinfile:
@@ -31,6 +21,7 @@ tasks:
 
   - name: Render per-profile gitconfig
     tags: 
+      - git
       - development
       - development.git
     items: ${{ vars.git.profiles | default([]) }}
@@ -48,6 +39,7 @@ tasks:
 
   - name: Render enterprise gitconfig
     tags: 
+      - git
       - development
       - development.git
     when: github.enterprise is defined
