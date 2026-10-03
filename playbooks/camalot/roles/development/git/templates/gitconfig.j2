@@ -194,8 +194,8 @@
   insteadOf = "https://github.com"
 
 {% for profile in git.profiles | default([]) %}
-{%- for gitdir in profile.gitdirs %}
+{% for gitdir in profile.gitdirs %}
 [includeIf "{{ gitdir }}"]
   path = ~/.gitconfig-{{ profile.name }}
-{%- endfor %}
+{% endfor %}
 {% endfor %}

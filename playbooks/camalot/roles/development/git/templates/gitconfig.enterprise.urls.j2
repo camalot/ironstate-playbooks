@@ -3,13 +3,13 @@
 {%- for org in ent.orgs | default([]) %}
 [url "git@{{ ent.host }}:{{ org }}/"]
   insteadOf = "git@github.com:{{ org }}/"
-{%- endfor %}
+{% endfor %}
 {% endfor %}
 
 # Enforce SSH — enterprise hosts/orgs (managed)
 {% for ent in enterprise | default([]) %}
-{%- for org in ent.orgs | default([]) %}
+{% for org in ent.orgs | default([]) %}
 [url "ssh://git@{{ ent.host }}/{{ org }}"]
   insteadOf = "https://github.com/{{ org }}"
-{%- endfor %}
+{% endfor %}
 {% endfor %}

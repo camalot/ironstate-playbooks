@@ -4,8 +4,8 @@
 [user]
   name = {{ profile.user.name }}
   email = {{ profile.user.email }}
-{% if profile.user.signingkey is defined and profile.user.signingkey | length > 0 -%}
-{%- set key_type = profile.user.signingkey_format | default('ssh') %}
+{% if profile.user.signingkey is defined and profile.user.signingkey | length > 0 %}
+{% set key_type = profile.user.signingkey_format | default('ssh') %}
   signingkey = {{ profile.user.signingkey }}
 [gpg]
   format = {{ key_type }}
