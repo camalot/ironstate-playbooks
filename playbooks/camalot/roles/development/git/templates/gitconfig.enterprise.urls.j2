@@ -2,7 +2,7 @@
 {% for ent in enterprise | default([]) %}
 {% for org in ent.orgs | default([]) %}
 [url "git@{{ ent.host }}:{{ org }}/"]
-        insteadOf = "git@github.com:{{ org }}/"
+  insteadOf = "git@github.com:{{ org }}/"
 {% endfor %}
 {% endfor %}
 

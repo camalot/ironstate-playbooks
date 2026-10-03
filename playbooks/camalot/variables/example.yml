@@ -10,10 +10,11 @@ vars:
         gitdirs: 
           - "gitdir:~/Development/work/"
           - "gitdir/i:${{ development.work }}"
-        
         user:
           name: "John Doe"
           email: "john.doe@my-company.com"
+          signing_key: "~/.ssh/signing_key"
+          format: "ssh"
       - name: oss
         gitdirs: 
           - "gitdir:~/Development/oss/"

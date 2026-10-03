@@ -2,14 +2,13 @@
 # Profile: {{ profile.name }} — applied for {{ profile.gitdirs | default([]) | concat(', ') }}
 
 [user]
-        name = {{ profile.user.name }}
-        email = {{ profile.user.email }}
+  name = {{ profile.user.name }}
+  email = {{ profile.user.email }}
 {% if profile.user.signingkey is defined and profile.user.signingkey | length > 0 %}
-        signingkey = {{ profile.user.signingkey }}
-
+{% set key_type = profile.user.format | default('ssh') %}
+  signingkey = {{ profile.user.signingkey }}
 [gpg]
-        format = ssh
-
+  format = {{ key_type }}
 [commit]
-        gpgsign = true
+  gpgsign = true
 {% endif %}

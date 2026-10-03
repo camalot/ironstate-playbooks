@@ -163,31 +163,31 @@
 {% set user_email = git.user.email | default('') %}
 {% if user_name and user_email %}
 [user]
-        name = {{ user_name }}
-        email = {{ user_email }}
+  name = {{ user_name }}
+  email = {{ user_email }}
 {% endif %}
 
 [url "git@github.com:"]
-        insteadOf = "gh:"
-        pushInsteadOf = "github:"
-        pushInsteadOf = "git://github.com/"
+  insteadOf = "gh:"
+  pushInsteadOf = "github:"
+  pushInsteadOf = "git://github.com/"
 
 [url "git://github.com/"]
-        insteadOf = "github:"
+  insteadOf = "github:"
 
 [url "git@gist.github.com:"]
-        insteadOf = "gst:"
-        pushInsteadOf = "gist:"
-        pushInsteadOf = "git://gist.github.com/"
+  insteadOf = "gst:"
+  pushInsteadOf = "gist:"
+  pushInsteadOf = "git://gist.github.com/"
 
 [url "git://gist.github.com/"]
-        insteadOf = "gist:"
+  insteadOf = "gist:"
 
 [pager]
   branch = false
 
 [url "ssh://git@github.com"]
-      insteadOf = "https://github.com"
+  insteadOf = "https://github.com"
 
 {% for profile in git.profiles | default([]) %}
 {% for gitdir in profile.gitdirs %}
