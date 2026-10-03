@@ -126,11 +126,6 @@
   changed = green
   untracked = cyan
 
-[commit]
-
-  # https://help.github.com/articles/signing-commits-using-gpg/
-  # gpgsign = true
-
 [diff]
 
   # Detect copies as well as renames
@@ -165,6 +160,15 @@
 [user]
   name = {{ user_name }}
   email = {{ user_email }}
+{% if git.user.signingkey is defined and git.user.signingkey | length > 0 %}
+{% set key_type = git.user.signingkey_format | default('ssh') %}
+  signingkey = {{ git.user.signingkey }}
+[gpg]
+  format = {{ key_type }}
+[commit]
+  gpgsign = true
+{% endif %}
+
 {% endif %}
 
 [url "git@github.com:"]
