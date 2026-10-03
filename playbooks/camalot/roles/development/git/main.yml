@@ -2,9 +2,8 @@
 
 tasks:
 
-  - name: LOG
-    log:
-      message: 'enabled: ${{ development | enabled("git") }}'
+  # git settings are under vars.git
+  
 
   - name: Install Delta
     tags:
@@ -12,7 +11,7 @@ tasks:
       - development.git
     xget:
       package: dandavison/delta
-      state: ${{ development | enabled("git") | ternary("present", "absent") }}
+      state: ${{ git | enabled() | ternary("present", "absent") }}
       args:
         - --to=${{ facts.local_bin_path | join("delta") | extension("exe") }}
         - --upgrade-only
@@ -22,6 +21,7 @@ tasks:
       - development
       - development.git
     blockinfile:
+      state: ${{ git | enabled() | ternary("present", "absent") }}
       create: true
       template:
         src: templates/gitconfig.j2
@@ -35,6 +35,7 @@ tasks:
       - development.git
     items: ${{ vars.git.profiles | default([]) }}
     template:
+      state: ${{ git | enabled() | ternary("present", "absent") }}
       # TODO: Consider using blockinfile instead of template for per-profile gitconfig
       # also consider allowing create / force for per-profile gitconfig
       # create: true
@@ -51,6 +52,7 @@ tasks:
       - development.git
     when: github.enterprise is defined
     blockinfile:
+      state: ${{ git | enabled() | ternary("present", "absent") }}
       template:
         src: templates/gitconfig.enterprise.urls.j2
         engine: jinja

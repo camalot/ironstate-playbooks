@@ -11,4 +11,4 @@ tasks:
     include:
       name: roles/development/git
     when:
-      - development | enabled("git")
+      - git | enabled()
