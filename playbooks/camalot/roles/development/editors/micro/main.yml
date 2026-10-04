@@ -2,9 +2,41 @@
 
 tasks:
 
+  - name: Get Micro Editor Windows Asset Information
+    fact:
+      name: micro_win_asset
+      value: ${{ (facts.arch == 'amd64') | ternary('win64.zip', (facts.arch == 'arm64') | ternary('arm64.zip', 'win32.zip')) }}
+    when: 
+      - facts.os_family == 'windows'
+
   - name: Install Micro Editor (${{ facts.os_family }})
+    tags:
+      - development
+      - development.editors
+      - development.editors.micro
     xget:
       package: micro-editor/micro
       state: ${{ development | enabled("editors", "micro") | ternary("present", "absent") }}
+      args:
+        - --to=${{ facts.local_bin_path | join('micro.exe') }}
+        - --ignore=.sha
+        - --asset=${{ facts.micro_win_asset | default('.zip') }}
     when:
       - development | enabled("editors", "micro")
+      - facts.os_family == 'windows'
+
+  - name: Install Micro Editor (${{ facts.os_family }})
+    tags:
+      - development
+      - development.editors
+      - development.editors.micro
+    xget:
+      package: micro-editor/micro
+      state: ${{ development | enabled("editors", "micro") | ternary("present", "absent") }}
+      args:
+        - --to=${{ facts.local_bin_path | join('micro') }}
+        - --ignore=.sha
+        - --asset=.tar.gz
+    when:
+      - development | enabled("editors", "micro")
+      - facts.os_family != 'windows'

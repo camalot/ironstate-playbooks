@@ -1,0 +1,55 @@
+---
+
+vars:
+  defaults:
+    development:
+      editorconfig:
+        rules:
+          '*':
+            charset: utf-8
+            indent_style: space
+            end_of_line: lf
+            insert_final_newline: true
+            trim_trailing_whitespace: true
+            indent_size: 2
+          '*.txt':
+            charset: unset
+            indent_size: unset
+            indent_style: unset
+          '*.ps1':
+            charset: unset
+          'devcontainer{-lock,}.json':
+            insert_final_newline: unset
+            trim_trailing_whitespace: unset
+          '*.md':
+            insert_final_newline: unset
+            trim_trailing_whitespace: unset
+            indent_size: unset
+          '*.{yaml,yml}':
+            indent_style: space
+          '*.{sh,bash,zsh,ps1,fish,nu}':
+            indent_style: space
+          '*.{jinja,jinja2}':
+            indent_style: space
+
+tasks:
+
+  - name: LOG
+    log:
+      message: "Creating ~/.editorconfig if it does not exist"
+
+  - name: Check if ~/.editorconfig exists
+    stat:
+      path: "~/.editorconfig"
+    id: editorconfig_stat
+
+  - name: Create ~/.editorconfig
+    template:
+      src: editorconfig.j2
+      dest: "~/.editorconfig"
+      mode: "0644"
+      owner: "${{ facts.user_name }}"
+      vars:
+        editorconfig: "${{ development.editorconfig | default(vars.defaults.development.editorconfig) }}"
+    when:
+      - not editorconfig_stat.stat.exists

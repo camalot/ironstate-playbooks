@@ -1,0 +1,8 @@
+root = true
+
+{% for pattern, rules in editorconfig.rules.items() %}
+[{{ pattern }}]
+{% for key, value in rules.items() %}
+{{ key }} = {{ value }}
+{% endfor %}
+{% endfor %}

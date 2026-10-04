@@ -12,3 +12,9 @@ tasks:
       name: roles/development/git
     when:
       - git | enabled()
+
+  - name: Include EditorConfig
+    include:
+      name: packages/editorconfig
+    when:
+      - development.editorconfig | default(true)
