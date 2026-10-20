@@ -1,0 +1,43 @@
+defaults:
+  user: rconr
+  port: 22
+hosts:
+  snoke:
+    address: 192.168.2.103
+    platform: linux
+    user: ryan
+  kresh:
+    address: 192.168.2.10
+    platform: windows
+  krayt:
+    address: 192.168.2.3
+    platform: windows
+    user: rconr
+  andeddu:
+    address: 192.168.2.17
+    platform: linux
+    user: rconr
+  anaxes:
+    address: 192.168.2.1
+    platform: linux
+    user: admin
+    port: 8338
+    become: false
+    verify_agent: false
+  atrius:
+    address: 192.168.2.25
+    platform: darwin
+    user: ryan
+  zannah:
+    address: 192.168.2.16
+    platform: windows
+    user: admin
+  vader:
+    address: 192.168.2.18
+    user: rconr
+    platform: linux
+groups:
+  linux: [snoke, andeddu, vader]
+  routers: [anaxes]
+  windows: [krayt, kresh, zannah]
+  darwin: [atrius]
