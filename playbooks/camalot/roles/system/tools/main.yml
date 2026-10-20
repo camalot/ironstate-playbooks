@@ -1,0 +1,20 @@
+---
+
+tasks:
+
+  - name: Include sysinternals tools
+    tags:
+      - system.tools.sysinternals
+      - system.tools
+    when:
+      - facts.os_family == "windows"
+      - system.tools | enabled("sysinternals")
+    include:
+      name: roles/system/tools/sysinternals
+
+  - name: Include System Tweaks
+    tags:
+      - system.tools.tweaks
+      - system.tools
+    include:
+      name: roles/system/tools/tweaks

@@ -15,6 +15,10 @@ tasks:
     include:
       name: roles/wsl
 
+  - name: Include IronState Package Managers
+    include:
+      name: roles/ironstate
+
   - name: Include Debian-Based Role
     include:
       name: tasks/debian-based
@@ -40,3 +44,9 @@ tasks:
   - name: Include Powershell Facts
     include:
       name: tasks/shell/pwsh/facts
+
+  - name: Include System Tools Role
+    include:
+      name: roles/system
+    when:
+      - system | enabled()

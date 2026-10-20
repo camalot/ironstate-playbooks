@@ -1,0 +1,19 @@
+---
+
+vars:
+  defaults:
+    system:
+      monitoring:
+        smartctl: false
+
+tasks:
+
+  - name: Include SMART monitoring
+    tags:
+      - system.monitoring
+      - system.monitoring.smartctl
+      - system.monitoring.smart
+    include: 
+      name: packages/smartctl
+    when:
+      - system.monitoring.smartctl | default(vars.defaults.system.monitoring.smartctl)

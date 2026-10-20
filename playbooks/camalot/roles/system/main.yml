@@ -1,0 +1,17 @@
+---
+
+tasks:
+
+  - name: Include system tools
+    tags:
+      - system.tools
+      - system
+    include:
+      name: roles/system/tools
+
+  - name: Include system monitoring
+    tags:
+      - system.monitoring
+      - system
+    include:
+      name: roles/system/monitoring

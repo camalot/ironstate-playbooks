@@ -34,10 +34,6 @@ vars:
 
 tasks:
 
-  - name: LOG
-    log:
-      message: "Creating ~/.editorconfig if it does not exist"
-
   - name: Check if ~/.editorconfig exists
     stat:
       path: "~/.editorconfig"
@@ -45,11 +41,13 @@ tasks:
 
   - name: Create ~/.editorconfig
     template:
-      src: editorconfig.j2
+      create: true
+      src: templates/editorconfig.j2
+      engine: jinja2
       dest: "~/.editorconfig"
       mode: "0644"
-      owner: "${{ facts.user_name }}"
+      owner: "${{ facts.os_family == 'windows' | ternary('', facts.user_name) }}"
       vars:
-        editorconfig: "${{ development.editorconfig | default(vars.defaults.development.editorconfig) }}"
+        editorconfig: "${{ vars.defaults.development.editorconfig | merge(development.editorconfig) }}"
     when:
       - not editorconfig_stat.stat.exists

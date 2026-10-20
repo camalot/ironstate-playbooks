@@ -1,0 +1,39 @@
+---
+
+tasks:
+
+  - name: Scoop Installed Fact
+    failed_when: false
+    fact:
+      name: scoop_installed
+      shell:
+        type: pwsh
+        command: Get-Command scoop -ErrorAction SilentlyContinue
+      value: ${{ rc == 0 }}
+
+  # disabled as it returns a table, and not a map array type structure
+  # - name: Scoop Buckets Fact
+  #   continue_on_error: true
+  #   when: 
+  #     - facts.scoop_installed | default(false)
+  #   fact:
+  #     name: scoop_buckets
+  #     shell:
+  #       type: pwsh
+  #       command: '."$env:USERPROFILE\scoop\shims\scoop.ps1" bucket list'
+
+  - name: Install Scoop
+    when:
+      - not (facts.scoop_installed | default(false))
+    shell:
+      type: pwsh
+      command: |
+        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+        iwr get.scoop.sh | iex
+
+  - name: Register Scoop Buckets
+    shell:
+      type: pwsh
+      command: |
+        scoop bucket add ${{ item.name }} ${{ item.url }}
+    items: ${{ defaults.scoop.buckets | merge(vars.scoop.buckets | default({})) }}

@@ -1,0 +1,30 @@
+---
+
+tasks:
+  - name: Install Sysinternals Suite
+    tags: 
+      - system.tools.sysinternals
+      - sysinternals
+    zip:
+      src: https://download.sysinternals.com/files/SysinternalsSuite.zip
+      dest: ${{ facts.local_bin_path | join('sysinternals') }}
+      exclude:
+        - '*.chm'
+        - '*.txt'
+        - '*.pdf'
+      include:
+        - '*.*'
+      creates:
+        - ${{ facts.local_bin_path | join('sysinternals') }}/*
+      state: ${{ system.tools.sysinternals | ternary('latest', 'absent') }}
+      sha256:
+        cache: ${{ facts.local_bin_path | join('sysinternals/SysinternalsSuite.zip.sha256') }}
+
+  - name: Register sysinternals bin path
+    tags: 
+      - system.tools.sysinternals
+      - sysinternals
+    path:
+      paths:
+        - ${{ facts.local_bin_path | join('sysinternals') }}
+      state: ${{ system.tools.sysinternals | ternary('present', 'absent') }}

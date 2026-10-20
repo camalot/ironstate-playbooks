@@ -36,6 +36,11 @@ vars:
         profile: "~/.config/powershell/default.omp.json"
       profile: "~/.config/powershell/profile.ps1"
 
+  system:
+    tools:
+      sysinternals: true
+    monitoring:
+      smartctl: false # disabled as it should currently exist.
 tasks:
 
   - name: Include base host configuration

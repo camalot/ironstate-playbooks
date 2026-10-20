@@ -9,14 +9,14 @@ tasks:
   - name: smartctl path fact
     id: smartctl_path
     shell:
-      command: Get-Command smartctlx | Select-Object -ExpandProperty Source
+      command: Get-Command smartctl | Select-Object -ExpandProperty Source
 
   - name: Install smartctl exporter
     xget:
       package: smartmontools/smartctl_exporter
       state: ${{ package.state }}
       args:
-        - --to=${{ facts.local_bin_path | default("~/.local/bin") | join("smartctl_exporter") | extension("exe") }}
+        - --to=${{ facts.local_bin_path | default("~/.local/bin") | join("smartctl_exporter.exe") }}
         - --upgrade-only
         - --asset=".zip"
 
@@ -26,7 +26,7 @@ tasks:
       name: smartctl_exporter
       description: "Run smartctl_exporter on logon"
       actions:
-        - execute: ${{ facts.local_bin_path | default("~/.local/bin") | join("smartctl_exporter") | extension("exe") }}
+        - execute: ${{ facts.local_bin_path | default("~/.local/bin") | join("smartctl_exporter.exe") }}
           arguments: "--smartctl.path={{ smartctl_path.stdout }} --web.listen-address=:9633"
       triggers:
         - type: "logon"
