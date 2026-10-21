@@ -1,5 +1,13 @@
 ---
 
+
+vars:
+  defaults:
+    scoop:
+      buckets:
+        - name: camalot
+          url: https://github.com/camalot/scoop
+
 tasks:
 
   - name: Scoop Installed Fact
@@ -31,9 +39,13 @@ tasks:
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
         iwr get.scoop.sh | iex
 
+
   - name: Register Scoop Buckets
     shell:
       type: pwsh
       command: |
-        scoop bucket add ${{ item.name }} ${{ item.url }}
-    items: ${{ defaults.scoop.buckets | merge(vars.scoop.buckets | default({})) }}
+        # if bucket already exists, skip adding it
+        if (-not (scoop bucket list | Select-String -Pattern ${{ item.name }})) {
+          scoop bucket add ${{ item.name }} ${{ item.url }}
+        }
+    items: ${{ vars.defaults.scoop.buckets | merge(scoop.buckets) }}

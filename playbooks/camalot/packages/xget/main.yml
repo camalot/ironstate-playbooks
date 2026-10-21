@@ -2,43 +2,104 @@
 
 tasks:
 
-  - name: get xget facts (${{ facts.os_family }})
-    when:
-      - facts.os_family == 'windows'
+  - name: xget facts
     actions:
-      - name: xget Installed Facts (pwsh)
-        failed_when: false
-        fact:
-          name: xget_installed
-          shell:
-            type: pwsh
-            command: Get-Command -ErrorAction SilentlyContinue xget *> $null
-          value: ${{ rc == 0 }}
+      - name: get xget facts (${{ facts.os_family }})
+        when:
+          - facts.os_family == 'windows'
+        actions:
+          - name: xget Installed Facts (pwsh)
+            failed_when: false
+            fact:
+              name: xget_installed
+              shell:
+                type: pwsh
+                command: Get-Command -ErrorAction SilentlyContinue xget *> $null
+              value: ${{ rc == 0 }}
 
-  - name: get xget facts (${{ facts.os_family }})
-    when:
-      - facts.os_family != 'windows'
+      - name: get xget facts (${{ facts.os_family }})
+        when:
+          - facts.os_family != 'windows'
+        actions:
+          - name: xget Installed Facts (bash)
+            fact:
+              name: xget_installed
+              shell:
+                type: bash
+                command: command -v xget &> /dev/null
+              value: ${{ rc == 0 }}
+
+  - name: Install xget
     actions:
-      - name: xget Installed Facts (bash)
-        fact:
-          name: xget_installed
-          shell:
-            type: bash
-            command: command -v xget &> /dev/null
-          value: ${{ rc == 0 }}
+      - name: Install xget (${{ facts.os_family }})
+        when: 
+          - facts.os_family != 'windows' 
+          - not (facts.xget_installed | default(false))
+        shell:
+          type: bash
+          command: curl -fsSL -o xget.sh https://raw.githubusercontent.com/camalot/xget/main/install/xget.sh && bash xget.sh -d ${{ facts.local_bin_path }}
 
-  - name: Install xget (${{ facts.os_family }})
-    when: 
-      - facts.os_family != 'windows' 
-      - not (facts.xget_installed | default(false))
-    shell:
-      type: bash
-      command: curl -fsSL -o xget.sh https://raw.githubusercontent.com/camalot/xget/main/install/xget.sh && bash xget.sh -d ${{ facts.local_bin_path }}
+      - name: Install xget (${{ facts.os_family }})
+        when: 
+          - facts.os_family == 'windows' 
+          - not (facts.xget_installed | default(false))
+        shell:
+          type: pwsh
+          command: iwr https://raw.githubusercontent.com/camalot/xget/main/install/xget.ps1 | iex
 
-  - name: Install xget (${{ facts.os_family }})
-    when: 
-      - facts.os_family == 'windows' 
-      - not (facts.xget_installed | default(false))
-    shell:
-      type: pwsh
-      command: iwr https://raw.githubusercontent.com/camalot/xget/main/install/xget.ps1 | iex
+
+  - name: Add xget completion as block to shell config
+    actions:
+      - name: Add xget completion block (pwsh)
+        when:
+          - facts.shell_pwsh
+        blockinfile:
+          create: false
+          state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.pwsh_user_profile | resolve }}
+          block: |
+            # register xget completion for pwsh
+            if (Get-Command xget -ErrorAction SilentlyContinue) {
+              xget completion powershell | Out-String | Invoke-Expression
+            }
+
+      - name: Add xget completion block (bash)
+        when:
+          - facts.shell_bash
+          
+        blockinfile:
+          create: false
+          state: ${{ shells.bash | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.bash_user_profile | default('~/.bashrc') | resolve }}
+          block: |
+            if command -v xget &> /dev/null; then
+              source <(xget completion bash)
+            fi
+
+      - name: Add xget completion block (zsh)
+        when:
+          - facts.shell_zsh
+        blockinfile:
+          create: false
+          state: ${{ shells.zsh | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.zsh_user_profile | default('~/.zshrc') | resolve }}
+          block: |
+            if command -v xget &> /dev/null; then
+              source <(xget completion zsh)
+            fi
+
+      - name: Add xget completion block (fish)
+        when:
+          - facts.shell_fish
+        blockinfile:
+          create: false
+          state: ${{ shells.fish | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.fish_user_profile | default('~/.config/fish/config.fish') | resolve }}
+          block: |
+            if command -v xget &> /dev/null; then
+              xget completion fish | source
+            fi

@@ -2,13 +2,6 @@
 
 # sets up ironstate package managers
 
-vars:
-  defaults:
-    scoop:
-      buckets:
-        - name: camalot
-          url: https://github.com/camalot/scoop
-
 tasks:
 
   - name: Include xget
