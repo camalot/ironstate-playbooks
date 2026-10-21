@@ -18,3 +18,7 @@ tasks:
   - name: Include Scoop
     include:
       name: packages/scoop
+
+  - name: Include PipX
+    include:
+      name: packages/pipx
