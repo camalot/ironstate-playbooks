@@ -8,7 +8,7 @@ tasks:
       name: scoop_installed
       shell:
         type: pwsh
-        command: Get-Command scoop -ErrorAction SilentlyContinue
+        command: Get-Command scoop -ErrorAction SilentlyContinue *> $null
       value: ${{ rc == 0 }}
 
   # disabled as it returns a table, and not a map array type structure
