@@ -12,7 +12,7 @@ tasks:
           name: xget_installed
           shell:
             type: pwsh
-            command: Get-Command -ErrorAction SilentlyContinue xget
+            command: Get-Command -ErrorAction SilentlyContinue xget *> $null
           value: ${{ rc == 0 }}
 
   - name: get xget facts (${{ facts.os_family }})

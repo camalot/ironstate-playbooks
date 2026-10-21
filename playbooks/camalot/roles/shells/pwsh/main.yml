@@ -11,6 +11,14 @@ vars:
 
 tasks:
 
+  - name: PowerShell Binary Path Fact
+    fact:
+      name: pwsh_binary_path
+      shell:
+        type: pwsh
+        command: Get-Command pwsh | Select-Object -ExpandProperty Source
+      value: "${{ stdout | trim() }}"
+
   - name: PowerShell System Profile Path Fact
     fact:
       name: pwsh_profile_path

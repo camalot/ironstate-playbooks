@@ -2,9 +2,6 @@
 
 tasks: 
 
-  # for windows, set the default shell for ssh:
-  # New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Program Files\PowerShell\7\pwsh.exe" -PropertyType String -Force
-
   - name: akinoiro/ssh-list
     tags:
       - ssh
@@ -18,22 +15,14 @@ tasks:
 
   - name: byawitz/ggh
     tags:
-      - development
-      - git
+      - ssh
+      - ssh.ggh
     xget:
       package: byawitz/ggh
       state: ${{ ssh.ggh | default(true) | ternary('present', 'absent') }}
       args:
         - --to=${{ facts.local_bin_path | join('ggh') | extension("exe") }}
         - --upgrade-only
-
-  - name: WinSCP
-    tags:
-      - ssh
-      - ssh.winscp
-    winget:
-      package: WinSCP.WinSCP
-      state: ${{ ssh.winscp | default(true) | ternary('present', 'absent') }}
 
   - name: Ensure authorized_keys are set up
     tags:

@@ -1,0 +1,38 @@
+---
+
+tasks:
+
+  - name: WinSCP
+    tags:
+      - ssh
+      - ssh.windows
+      - ssh.winscp
+    winget:
+      package: WinSCP.WinSCP
+      state: ${{ ssh.winscp | default(true) | ternary('present', 'absent') }}
+
+  - name: Ensure PowerShell is installed on Windows
+    tags:
+      - ssh
+      - ssh.windows
+      - ssh.windows.powershell
+    assert:
+      that:
+        - facts.pwsh_binary_path is defined
+        - facts.pwsh_binary_path | length > 0
+        - facts.shell_pwsh
+      fail_msg: "PowerShell is not installed or not properly configured on Windows"
+
+  - name: Set default shell for SSH on Windows
+    registry:
+      path: HKLM:\SOFTWARE\OpenSSH
+      state: present
+      values:
+        - name: DefaultShell
+          type: String
+          value: "${{ facts.pwsh_binary_path }}"
+    #   New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Program Files\PowerShell\7\pwsh.exe" -PropertyType String -Force
+    tags:
+      - ssh
+      - ssh.windows
+      - ssh.windows.default_shell
