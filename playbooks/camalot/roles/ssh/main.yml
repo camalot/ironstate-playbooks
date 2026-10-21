@@ -2,6 +2,9 @@
 
 tasks: 
 
+  # for windows, set the default shell for ssh:
+  # New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Program Files\PowerShell\7\pwsh.exe" -PropertyType String -Force
+
   - name: akinoiro/ssh-list
     tags:
       - ssh
