@@ -36,8 +36,12 @@ tasks:
     shell:
       type: pwsh
       command: |
-        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+        if (-not (Get-ExecutionPolicy -Scope CurrentUser -ErrorAction SilentlyContinue | Where-Object { $_.ToString() -in 'Restricted', 'AllSigned', 'RemoteSigned', 'Unrestricted' })) {
+          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+        }
         iwr get.scoop.sh | iex
+    creates:
+      - $env:USERPROFILE\scoop\shims\scoop.ps1
 
 
   - name: Register Scoop Buckets
