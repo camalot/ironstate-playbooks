@@ -1,0 +1,30 @@
+---
+
+tasks:
+
+  - name: Chocolatey Installed Fact
+    fact:
+      name: chocolatey_installed
+      shell:
+        type: pwsh
+        command: Get-Command -ErrorAction SilentlyContinue choco *> $null
+      value: "${{ rc == 0 }}"
+
+  - name: Chocolatey Version Fact
+    when:
+      - facts.chocolatey_installed
+    fact:
+      name: chocolatey_version
+      shell:
+        type: pwsh
+        command: choco --version
+      value: "${{ stdout | trim }}"
+
+  - name: Install Chocolatey
+    when:
+      - not facts.chocolatey_installed
+    shell:
+      type: pwsh
+      command: |
+        Set-ExecutionPolicy Bypass -Scope Process -Force; 
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));

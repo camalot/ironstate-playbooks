@@ -4,6 +4,10 @@
 
 tasks:
 
+  - name: Include ironstate completion
+    include:
+      name: roles/ironstate/completion
+
   - name: Include xget
     include:
       name: packages/xget
@@ -15,3 +19,9 @@ tasks:
   - name: Include PipX
     include:
       name: packages/pipx
+
+  - name: Include Chocolatey
+    include:
+      name: packages/chocolatey
+
+  

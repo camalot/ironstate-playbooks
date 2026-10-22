@@ -29,6 +29,15 @@ tasks:
                 command: command -v xget &> /dev/null
               value: ${{ rc == 0 }}
 
+      - name: xget version fact
+        when:
+          - facts.xget_installed
+        fact:
+          name: xget_version
+          shell:
+            command: xget --version
+          value: ${{ stdout | trim }}
+
   - name: Install xget
     actions:
       - name: Install xget (${{ facts.os_family }})
@@ -67,7 +76,6 @@ tasks:
       - name: Add xget completion block (bash)
         when:
           - facts.shell_bash
-          
         blockinfile:
           create: false
           state: ${{ shells.bash | enabled() | ternary('present', 'absent') }}

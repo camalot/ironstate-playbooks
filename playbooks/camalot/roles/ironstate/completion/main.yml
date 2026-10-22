@@ -1,0 +1,57 @@
+---
+
+tasks:
+  - name: Add ironstate completion as block to shell config
+    actions:
+      - name: Add ironstate completion block (pwsh)
+        when:
+          - facts.shell_pwsh
+        blockinfile:
+          create: false
+          state: ${{ shells.pwsh | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.pwsh_user_profile | resolve }}
+          block: |
+            # register ironstate completion for pwsh
+            if (Get-Command ironstate -ErrorAction SilentlyContinue) {
+              ironstate completion powershell | Out-String | Invoke-Expression
+            }
+
+      - name: Add ironstate completion block (bash)
+        when:
+          - facts.shell_bash
+        blockinfile:
+          create: false
+          state: ${{ shells.bash | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.bash_user_profile | default('~/.bashrc') | resolve }}
+          block: |
+            if command -v ironstate &> /dev/null; then
+              source <(ironstate completion bash)
+            fi
+
+      - name: Add ironstate completion block (zsh)
+        when:
+          - facts.shell_zsh
+        blockinfile:
+          create: false
+          state: ${{ shells.zsh | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.zsh_user_profile | default('~/.zshrc') | resolve }}
+          block: |
+            if command -v ironstate &> /dev/null; then
+              source <(ironstate completion zsh)
+            fi
+
+      - name: Add ironstate completion block (fish)
+        when:
+          - facts.shell_fish
+        blockinfile:
+          create: false
+          state: ${{ shells.fish | enabled() | ternary('present', 'absent') }}
+          insertafter: EOF
+          dest: ${{ facts.fish_user_profile | default('~/.config/fish/config.fish') | resolve }}
+          block: |
+            if command -v ironstate &> /dev/null; then
+              ironstate completion fish | source
+            fi
