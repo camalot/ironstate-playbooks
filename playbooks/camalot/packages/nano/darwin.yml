@@ -1,0 +1,14 @@
+---
+
+tasks:
+
+  - name: Install Nano (${{ facts.os_family }})
+    brew:
+      name: nano
+      state: ${{ package.state }}
+    when:
+      - facts.os_family == "darwin"
+
+  - name: Include Nano Configuration
+    include:
+      name: packages/nano/configuration

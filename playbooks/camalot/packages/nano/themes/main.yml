@@ -1,0 +1,26 @@
+---
+
+tasks:
+
+  - name: Create Themes Path
+    file:
+      path: "~/.config/nano/"
+      type: directory
+      state: ${{ package.state | ternary('present', 'absent') }}
+      mode: '0755'
+
+  - name: Copy Themes
+    copy:
+      src: "files/themes"
+      dest: "~/.config/nano/"
+      mode: '0644'
+
+  - name: Embed Theme to Nano Configuration
+    blockinfile:
+      dest: ~/.config/nano/nanorc
+      template:
+        src: files/themes/dracula.nanorc
+        engine: jinja2
+      create: true
+      mode: '0644'
+      insertafter: EOF

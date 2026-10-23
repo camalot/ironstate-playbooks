@@ -3,6 +3,8 @@
 tasks:
 
   - name: xget facts
+    environment:
+      PATH: ${{ facts.local_bin_path }}:${{ envs.PATH }}
     actions:
       - name: get xget facts (${{ facts.os_family }})
         when:
@@ -22,11 +24,13 @@ tasks:
           - facts.os_family != 'windows'
         actions:
           - name: xget Installed Facts (bash)
+            failed_when: false
             fact:
               name: xget_installed
               shell:
                 type: bash
-                command: command -v xget &> /dev/null
+                command: |
+                  command -v xget &> /dev/null
               value: ${{ rc == 0 }}
 
       - name: xget version fact
@@ -58,6 +62,8 @@ tasks:
 
 
   - name: Add xget completion as block to shell config
+    environment:
+      PATH: ${{ facts.local_bin_path }}:${{ envs.PATH }}
     actions:
       - name: Add xget completion block (pwsh)
         when:

@@ -1,0 +1,24 @@
+---
+
+tasks:
+  - name: Create Nano Configuration Directory
+    file:
+      path: ~/.config/nano
+      type: directory
+      state: ${{ package.state | ternary('present', 'absent') }}
+      mode: '0755'
+
+  - name: Copy Nano Configuration
+    copy:
+      src: files/.nanorc
+      dest: ~/.config/nano/nanorc
+      state: ${{ package.state | ternary('present', 'absent') }}
+      mode: '0644'
+
+  - name: Include Nano Themes
+    include:
+      name: packages/nano/themes
+
+  - name: Include Nano Syntax
+    include:
+      name: packages/nano/syntax
