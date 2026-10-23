@@ -3,6 +3,10 @@
 tasks:
 
   - name: Include Nano Package
+    tags:
+      - development
+      - development.editors
+      - development.editors.nano
     include:
       name: packages/nano
     when:

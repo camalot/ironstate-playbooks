@@ -2,9 +2,6 @@
 
 vars: 
 
-  wsl:
-    ui: false
-
   languages:
     golang: false
     nodejs: false
@@ -15,6 +12,17 @@ vars:
     editors:
       vscode: false
       micro: true
+      nano: true
+
+  shells:
+    zoxide: true
+    bash: true
+    zsh: true
+    pwsh:
+      omp:
+        profile: "~/.config/powershell/default.omp.json"
+      profile: "~/.config/powershell/profile.ps1"
+
 
 tasks:
 

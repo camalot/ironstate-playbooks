@@ -10,4 +10,4 @@ set softwrap         # Wrap long lines visually instead of letting them run off-
 
 # unset breaklonglines
 
-include "/usr/share/nano/*.nanorc"
+# include "/usr/share/nano/*.nanorc"

@@ -1,0 +1,38 @@
+---
+
+tasks:
+
+  - name: nano/syntax - Check Installed Marker
+    stat:
+      path: ~/.config/nano/syntax.installed
+    id: nano_syntax_installed_marker
+
+  - name: nano/syntax - Fetch scopatz/nanorc syntax files (first install)
+    when:
+      - not nano_syntax_installed_marker.stat.exists
+    git:
+      repo: https://github.com/scopatz/nanorc.git
+      dest: "~/.config/nano/syntax"
+      clone: yes
+      update: yes
+      force: yes
+    environment:
+      GIT_CONFIG_NOSYSTEM: "1"
+      GIT_CONFIG_GLOBAL: '/dev/null'
+
+  - name: nano/syntax - Mark Syntax Installed
+    when:
+      - not nano_syntax_installed_marker.stat.exists
+    file:
+      path: ~/.config/nano/syntax.installed
+      type: touch
+
+  - name: Embed Syntax to Nano Configuration
+    blockinfile:
+      dest: ~/.config/nano/nanorc
+      block: |
+        # Include all syntax files from the syntax directory
+        include ~/.config/nano/syntax/*.nanorc
+      create: true
+      mode: '0644'
+      insertafter: EOF

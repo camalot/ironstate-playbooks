@@ -3,6 +3,7 @@
 tasks:
 
   - name: Is WSL Environment
+    failed_when: false
     fact:
       name: is_wsl
       shell:
@@ -13,6 +14,7 @@ tasks:
       - facts.os_family != 'windows'
 
   - name: Is WSL2 Environment
+    failed_when: false
     fact:
       name: is_wsl2
       shell:
@@ -23,6 +25,7 @@ tasks:
       - facts.is_wsl is defined and (facts.is_wsl | default(false))
 
   - name: Is WSL UI Enabled
+    failed_when: false
     fact:
       name: is_wsl_ui_enabled
       value: ${{ vars.wsl.ui | default(false) }}
