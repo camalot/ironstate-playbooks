@@ -6,6 +6,10 @@ hosts:
     address: 192.168.2.103
     platform: linux
     user: ryan
+  traya:
+    address: 192.168.2.55
+    platform: linux
+    user: ryan
   kresh:
     address: 192.168.2.10
     platform: windows
@@ -24,6 +28,16 @@ hosts:
     port: 8338
     become: false
     verify_agent: false
+    # vars:
+    #   local:
+    #     bin_path: /home/admin
+  coruscant:
+    address: coruscant.bit13.local
+    platform: linux
+    user: admin
+    port: 8338
+    become: false
+    verify_agent: false
   atrius:
     address: 192.168.2.25
     platform: darwin
@@ -36,8 +50,36 @@ hosts:
     address: 192.168.2.18
     user: rconr
     platform: linux
+
+  congus:
+    address: 192.168.2.4
+    platform: linux
+    user: pi
+    # vars:
+    #   local:
+    #     bin_path: ~/.local/bin
+
+  bataal:
+    address: 192.168.2.8
+    platform: linux
+    user: pi
+    vars:
+      local:
+        bin_path: ~/.local/bin
 groups:
-  linux: [snoke, andeddu, vader]
-  routers: [anaxes]
-  windows: [krayt, kresh, zannah]
-  darwin: [atrius]
+  linux: 
+    - snoke
+    - andeddu
+    - vader
+    - traya
+  pi: 
+    - congus
+    - bataal
+  routers: 
+    - anaxes
+  windows:
+    - krayt
+    - kresh
+    - zannah
+  darwin:
+    - atrius
