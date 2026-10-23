@@ -62,7 +62,9 @@ tasks:
       insertbefore: BOF
       dest: "${{ shells.pwsh.profile | default(defaults.shells.pwsh.profile) }}"
       block: |
-        Write-Output "Loading Profile from $PROFILE";
+        if (-not [Console]::IsInputRedirected -and -not [Console]::IsOutputRedirected) {
+          Write-Output "Loading Profile from $PROFILE";
+        }
         $env:VIRTUAL_ENV_DISABLE_PROMPT = 1;
         $modules = @(
           "posh-git",

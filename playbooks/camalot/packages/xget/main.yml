@@ -3,6 +3,8 @@
 tasks:
 
   - name: xget facts
+    environment:
+      PATH: ${{ facts.local_bin_path }}:${{ envs.PATH }}
     actions:
       - name: get xget facts (${{ facts.os_family }})
         when:
@@ -28,7 +30,6 @@ tasks:
               shell:
                 type: bash
                 command: |
-                  export PATH="$HOME/.local/bin:$PATH"
                   command -v xget &> /dev/null
               value: ${{ rc == 0 }}
 
@@ -38,9 +39,7 @@ tasks:
         fact:
           name: xget_version
           shell:
-            command: |
-              export PATH="$HOME/.local/bin:$PATH"
-              xget --version
+            command: xget --version
           value: ${{ stdout | trim }}
 
   - name: Install xget
