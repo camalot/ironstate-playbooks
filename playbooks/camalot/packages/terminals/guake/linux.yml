@@ -1,0 +1,22 @@
+---
+
+tasks: 
+
+  - name: Install Guake Terminal 
+    become: true
+    actions:
+      - name: Install Guake (Arch Linux)
+        when:
+          - facts.os_family == 'archlinux'
+        shell:
+          type: bash
+          command: |
+            pamac build guake
+      - name: Install Guake (Debian/Ubuntu)
+        when:
+          - facts.os_family == 'debian'
+        shell:
+          type: bash
+          command: |
+            apt-get update && apt-get install -y guake
+      

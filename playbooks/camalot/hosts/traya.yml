@@ -1,0 +1,32 @@
+---
+
+vars: 
+
+  languages:
+    golang: false
+    nodejs: false
+    python: false
+    rust: true
+
+  development:
+    editors:
+      vscode: false
+      micro: true
+      nano: true
+
+  shells:
+    zoxide: true
+    bash: true
+    zsh: true
+    pwsh:
+      omp:
+        profile: "~/.config/powershell/default.omp.json"
+      profile: "~/.config/powershell/profile.ps1"
+
+  terminals:
+    ddterm: true
+tasks:
+
+  - name: Include base host configuration
+    include:
+      name: hosts/base

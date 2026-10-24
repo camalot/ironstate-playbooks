@@ -51,6 +51,12 @@ tasks:
     when:
       - ssh | enabled()
 
+  - name: Include Terminals Role
+    include:
+      name: roles/terminals
+    when:
+      - terminals | enabled()
+
   - name: Include System Tools Role
     include:
       name: roles/system

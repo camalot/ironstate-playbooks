@@ -1,0 +1,12 @@
+---
+
+tasks:
+
+  - name: Install SuperFile
+    xget:
+      package: yorukot/superfile
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+        - --upgrade-only
+        - --non-interactive

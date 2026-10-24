@@ -10,6 +10,9 @@ hosts:
     address: 192.168.2.55
     platform: linux
     user: ryan
+    vars:
+      terminals:
+        ddterm: true
   kresh:
     address: 192.168.2.10
     platform: windows

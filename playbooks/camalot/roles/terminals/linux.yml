@@ -1,0 +1,15 @@
+---
+tags:
+  - terminals
+
+
+tasks:
+
+  - name: Include ddterm terminal
+    tags:
+      - terminals
+      - terminals.ddterm
+    when:
+      - terminals | enabled('ddterm')
+    include:
+      name: packages/terminals/ddterm

@@ -1,0 +1,31 @@
+---
+
+tasks:
+
+- name: Arch Linux - Ensure GNOME Extensions is Installed
+  failed_when: "false"
+  fact:
+    name: gnome_extensions_installed
+    shell:
+      type: bash
+      command: |
+        command -v gnome-extensions &>/dev/null
+    value: "${{ rc == 0 }}"
+
+- name: Check DDTerm Installation
+  failed_when: "false"
+  id: ddterm_installed
+  shell:
+    type: bash
+    command: |
+      command -v gnome-extensions &>/dev/null && gnome-extensions list | grep -q ddterm
+  value: "${{ rc == 0 }}"
+
+- name: Arch Linux - Install ddterm
+  when:
+    - facts.gnome_extensions_installed
+    - not ddterm_installed
+  become: true
+  shell:
+    command: pamac build gnome-shell-extension-ddterm
+  
