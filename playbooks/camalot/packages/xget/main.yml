@@ -1,10 +1,11 @@
 ---
 
+envs:
+  PATH: ${{ facts.local_bin_path }}:${{ envs.PATH }}
+
 tasks:
 
   - name: xget facts
-    environment:
-      PATH: ${{ facts.local_bin_path }}:${{ envs.PATH }}
     actions:
       - name: get xget facts (${{ facts.os_family }})
         when:
@@ -15,6 +16,7 @@ tasks:
             fact:
               name: xget_installed
               shell:
+                silent: true
                 type: pwsh
                 command: Get-Command -ErrorAction SilentlyContinue xget *> $null
               value: ${{ rc == 0 }}
@@ -28,6 +30,7 @@ tasks:
             fact:
               name: xget_installed
               shell:
+                silent: true
                 type: bash
                 command: |
                   command -v xget &> /dev/null
@@ -39,6 +42,8 @@ tasks:
         fact:
           name: xget_version
           shell:
+            silent: true
+            type: bash
             command: xget --version
           value: ${{ stdout | trim }}
 
@@ -49,21 +54,25 @@ tasks:
           - facts.os_family != 'windows' 
           - not (facts.xget_installed | default(false))
         shell:
+          silent: true
           type: bash
           command: curl -fsSL -o xget.sh https://raw.githubusercontent.com/camalot/xget/main/install/xget.sh && bash xget.sh -d ${{ facts.local_bin_path }}
+        creates: 
+          - ${{ facts.local_bin_path | resolve | join('xget') }}
 
       - name: Install xget (${{ facts.os_family }})
         when: 
           - facts.os_family == 'windows' 
           - not (facts.xget_installed | default(false))
         shell:
+          silent: true
           type: pwsh
           command: iwr https://raw.githubusercontent.com/camalot/xget/main/install/xget.ps1 | iex
+        creates:
+          - ${{ facts.local_bin_path | resolve | join('xget.exe') }}
 
 
   - name: Add xget completion as block to shell config
-    environment:
-      PATH: ${{ facts.local_bin_path }}:${{ envs.PATH }}
     actions:
       - name: Add xget completion block (pwsh)
         when:

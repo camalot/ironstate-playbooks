@@ -1,0 +1,23 @@
+---
+
+tags:
+  - terminals
+  - terminals.windows
+
+tasks:
+
+  - name: Include Windows Terminal tasks
+    tags:
+      - terminals
+      - terminals.windows
+      - terminals.windows_terminal
+    include:
+      name: packages/terminals/windows
+
+  - name: Include ConEmu tasks
+    tags:
+      - terminals
+      - terminals.windows
+      - terminals.conemu
+    include:
+      name: packages/terminals/conemu

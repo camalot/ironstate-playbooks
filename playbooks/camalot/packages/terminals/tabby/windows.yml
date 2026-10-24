@@ -1,0 +1,10 @@
+---
+
+tasks:
+
+  - name: Install Tabby (${{ facts.os_family }})
+    when:
+      - terminals.tabby | enabled()
+    winget:
+      name: Eugeny.Tabby
+      state: "${{ package.state }}"

@@ -7,6 +7,7 @@ tasks:
     fact:
       name: is_wsl
       shell:
+        silent: true
         type: bash
         command: '[ -n "$WSL_DISTRO_NAME" ] && exit 0 || exit 1'
       value: ${{ rc == 0 }}
@@ -18,6 +19,7 @@ tasks:
     fact:
       name: is_wsl2
       shell:
+        silent: true
         type: bash
         command: "[ $(uname -r | grep -o 'microsoft-standard-WSL2') ] && exit 0 || exit 1"
       value: ${{ rc == 0 }}

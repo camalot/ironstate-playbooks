@@ -1,0 +1,10 @@
+---
+
+tasks:
+
+  - name: Install ConEmu (${{ facts.os_family }})
+    when:
+      - terminals.conemu | enabled()
+    winget:
+      name: Maximus5.ConEmu
+      state: "${{ package.state }}"

@@ -1,3 +1,10 @@
 ---
 
-tasks: []
+tags:
+  - terminals
+
+tasks:
+
+  - name: Include Tabby tasks
+    include:
+      name: packages/terminals/tabby

@@ -1,0 +1,10 @@
+---
+
+tags:
+  - ai
+
+tasks:
+
+  - name: Include AI tasks
+    include:
+      name: packages/ai
