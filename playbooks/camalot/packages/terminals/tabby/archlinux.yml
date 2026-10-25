@@ -1,0 +1,51 @@
+---
+
+tasks:
+
+  - name: Install Tabby (${{ facts.os_family }})
+    when:
+      - ${{ package.state == "present" or package.state == "latest" }}
+    shell: |
+      set -eou pipefail
+      if command -v yay &> /dev/null; then
+        yay -S --noconfirm tabby-bin && exit 0
+      fi
+
+      if command -v pamac &> /dev/null; then
+        pamac install --no-confirm tabby-bin && exit 0
+      fi
+
+      if command -v paru &> /dev/null; then
+        paru -S --noconfirm tabby-bin && exit 0
+      fi
+
+      echo "No supported AUR helper found for installing Tabby." 2>&1
+      exit 1
+    creates:
+      - /usr/bin/tabby
+    failed_when: 
+      - rc != 0
+
+  - name: Remove Tabby (${{ facts.os_family }})
+    when:
+      - ${{ package.state == "absent" }}
+    shell: |
+      set -eou pipefail
+      if command -v yay &> /dev/null; then
+        yay -R --noconfirm tabby-bin && exit 0
+      fi
+
+      if command -v pamac &> /dev/null; then
+        pamac remove --no-confirm tabby-bin && exit 0
+      fi
+
+      if command -v paru &> /dev/null; then
+        paru -R --noconfirm tabby-bin && exit 0
+      fi
+
+      echo "No supported AUR helper found for removing Tabby." 2>&1
+      exit 1
+    failed_when: 
+      - rc != 0
+    removes:
+      - /usr/bin/tabby

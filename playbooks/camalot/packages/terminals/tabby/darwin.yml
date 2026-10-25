@@ -1,0 +1,8 @@
+---
+
+tasks:
+
+  - name: Install Tabby (${{ facts.os_family }})
+    brew:
+      name: tabby
+      state: ${{ package.state }}

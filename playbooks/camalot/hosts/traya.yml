@@ -25,6 +25,8 @@ vars:
 
   terminals:
     ddterm: true
+    tabby: true
+
 tasks:
 
   - name: Include base host configuration

@@ -7,7 +7,7 @@ tasks:
       - terminals.windows | enabled('stable')
       - facts.os_family == "windows"
     winget:
-      name: Microsoft.WindowsTerminal
+      package: Microsoft.WindowsTerminal
       state: "${{ package.state }}"
 
   - name: Install Windows Terminal Preview
@@ -15,7 +15,7 @@ tasks:
       - terminals.windows.preview | enabled()
       - facts.os_family == "windows"
     winget:
-      name: Microsoft.WindowsTerminal.Preview
+      package: Microsoft.WindowsTerminal.Preview
       state: "${{ package.state }}"
 
   - name: Install Windows Intelligent Terminal
@@ -23,5 +23,5 @@ tasks:
       - terminals.windows.intelligent | enabled()
       - facts.os_family == "windows"
     winget:
-      name: Microsoft.IntelligentTerminal
+      package: Microsoft.IntelligentTerminal
       state: "${{ package.state }}"

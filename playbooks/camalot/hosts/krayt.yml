@@ -41,6 +41,13 @@ vars:
       sysinternals: true
     monitoring:
       smartctl: false # disabled as it should currently exist.
+
+  terminals:
+    windows:
+      stable: true
+      intelligent: true
+
+    tabby: true
 tasks:
 
   - name: Include base host configuration

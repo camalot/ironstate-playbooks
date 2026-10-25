@@ -1,0 +1,14 @@
+---
+
+tasks:
+
+  - name: OpenCode CLI (v1)
+    xget:
+      package: anomalyco/opencode
+      args:
+        - --binary=opencode
+        - --to="${{ facts.local_bin_path }}"
+        - --upgrade-only
+        - --non-interactive
+    creates:
+      - "${{ facts.local_bin_path }}/opencode"
