@@ -9,5 +9,5 @@ tasks:
 
   - name: Install Gemini (${{ facts.os_family }})
     winget:
-      name: Google.GeminiDesktop
+      package: Google.GeminiDesktop
       state: ${{ package.state }}

@@ -6,5 +6,5 @@ tasks:
     when:
       - terminals.tabby | enabled()
     winget:
-      name: Eugeny.Tabby
+      package: Eugeny.Tabby
       state: "${{ package.state }}"

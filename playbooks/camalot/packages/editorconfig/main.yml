@@ -41,7 +41,6 @@ tasks:
 
   - name: Create ~/.editorconfig
     template:
-      create: true
       src: templates/editorconfig.j2
       engine: jinja2
       dest: "~/.editorconfig"

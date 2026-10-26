@@ -6,5 +6,5 @@ tasks:
     when:
       - terminals.conemu | enabled()
     winget:
-      name: Maximus5.ConEmu
+      package: Maximus5.ConEmu
       state: "${{ package.state }}"

@@ -13,9 +13,9 @@ tasks:
     git:
       repo: https://github.com/scopatz/nanorc.git
       dest: "~/.config/nano/syntax"
-      clone: yes
-      update: yes
-      force: yes
+      clone: true
+      update: true
+      force: true
     environment:
       GIT_CONFIG_NOSYSTEM: "1"
       GIT_CONFIG_GLOBAL: '/dev/null'

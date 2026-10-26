@@ -19,7 +19,6 @@ tasks:
     type: bash
     command: |
       command -v gnome-extensions &>/dev/null && gnome-extensions list | grep -q ddterm
-  value: "${{ rc == 0 }}"
 
 - name: Arch Linux - Install ddterm
   when:
