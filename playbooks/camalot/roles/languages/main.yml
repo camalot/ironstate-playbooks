@@ -24,3 +24,9 @@ tasks:
       name: roles/languages/rust
     when:
       - languages | enabled('rust')
+
+  - name: Include dotNet Role
+    include:
+      name: roles/languages/dotnet
+    when:
+      - languages | enabled('dotnet')

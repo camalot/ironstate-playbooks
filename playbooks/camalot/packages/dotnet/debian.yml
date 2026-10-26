@@ -1,0 +1,33 @@
+---
+
+tasks:
+
+  - name: Register Microsoft package repository for dotNet
+    when:
+      - facts.os_family == "debian"
+      - facts.distribution != "ubuntu"
+    shell:
+      type: bash
+      command: |
+        set -euo pipefail
+        wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        rm packages-microsoft-prod.deb
+
+  - name: Install dotNet SDK
+    apt:
+      name: "dotnet-sdk-10.0"
+      state: present
+    when:
+      - languages.dotnet.sdk | default(defaults.languages.dotnet.sdk) | enabled()
+      - facts.os_family == "debian"
+      - facts.distribution != "ubuntu"
+
+  - name: Install dotNet Runtime
+    apt:
+      name: "dotnet-runtime-10.0"
+      state: present
+    when:
+      - languages.dotnet.runtime | default(defaults.languages.dotnet.runtime) | enabled()
+      - facts.os_family == "debian"
+      - facts.distribution != "ubuntu"

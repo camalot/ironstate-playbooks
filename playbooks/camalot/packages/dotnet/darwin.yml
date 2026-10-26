@@ -1,0 +1,15 @@
+---
+
+tasks:
+
+  - name: Install dotNet SDK
+    homebrew:
+      package: "dotnet-sdk"
+    when:
+      - languages.dotnet.sdk | default(defaults.languages.dotnet.sdk) | enabled()
+
+  - name: Install dotNet Runtime
+    homebrew:
+      package: "dotnet"
+    when:
+      - languages.dotnet.runtime | default(defaults.languages.dotnet.runtime) | enabled()

@@ -1,0 +1,24 @@
+---
+
+tasks:
+  - name: Install Ruby
+    tags:
+      - languages
+      - ruby
+    winget:
+      package: "${{ languages.ruby | toggle(defaults.languages.ruby) }}"
+      state: ${{ package.state }}
+      override: "${{ inputs.override }}"
+    when: languages.ruby | default(false)
+
+  - name: Install Ruby Gem Bundler
+    gem:
+      state: ${{ package.state }}
+      package: bundler
+
+  - name: Test Gem
+    gem:
+      state: ${{ package.state }}
+      package: jekyll
+      version: '4.3'
+    when: false # only for a test. set false so it doesn't install.

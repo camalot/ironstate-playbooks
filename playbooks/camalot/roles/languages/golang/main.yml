@@ -1,10 +1,11 @@
 ---
 
+tags: 
+  - languages
+  - languages.golang
+
 tasks:
   - name: Include GoLang
-    tags: 
-      - languages
-      - languages.golang
     include:
       name: packages/golang
       state: ${{ languages | enabled("golang") | ternary('present', 'absent') }}
@@ -12,9 +13,6 @@ tasks:
       - languages | enabled("golang")
 
   - name: Install golangci-lint
-    tags: 
-      - languages
-      - languages.golang
     when:
       - languages | enabled("golang")
     xget:
@@ -24,9 +22,6 @@ tasks:
         - --to=${{ facts.local_bin_path | join('golangci-lint') | extension("exe") }}
 
   - name: Install GoReleaser
-    tags: 
-      - languages
-      - languages.golang
     xget:
       package: "goreleaser/goreleaser"
       state: ${{ languages | enabled("golang") | ternary('present', 'absent') }}

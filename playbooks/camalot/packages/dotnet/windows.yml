@@ -1,0 +1,14 @@
+---
+
+tasks:
+  - name: Install dotNet Runtime
+    winget:
+      package: "${{ languages.dotnet.runtime | toggle(defaults.languages.dotnet.runtime) }}"
+    when: 
+      - languages.dotnet.runtime | default(defaults.languages.dotnet.runtime) | enabled()
+
+  - name: Install dotNet SDK
+    winget:
+      package: "${{ languages.dotnet.sdk | toggle(defaults.languages.dotnet.sdk) }}"
+    when: 
+      - languages.dotnet.sdk | default(defaults.languages.dotnet.sdk) | enabled()
