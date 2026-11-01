@@ -2,6 +2,10 @@ defaults:
   user: rconr
   port: 22
 hosts:
+  srv:
+    address: vps.ts.bit13.local
+    platform: linux
+    user: ryan
   snoke:
     address: 192.168.2.103
     platform: linux
