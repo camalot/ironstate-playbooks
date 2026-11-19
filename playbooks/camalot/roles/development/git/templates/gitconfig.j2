@@ -199,3 +199,6 @@
   path = ~/.gitconfig-{{ profile.name }}
 {% endfor %}
 {% endfor %}
+
+[init]
+  defaultBranch = {{ git.init.default_branch | default('main') }}
