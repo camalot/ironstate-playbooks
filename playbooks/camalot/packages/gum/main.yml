@@ -1,0 +1,10 @@
+---
+
+tasks:
+  - name: Install Gum
+    xget:
+      package: charmbracelet/gum
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+        - --upgrade-only

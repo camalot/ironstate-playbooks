@@ -1,0 +1,18 @@
+---
+
+tasks:
+
+  - name: Bat Exists
+    id: bat_exists
+    shell:
+      type: powershell
+      command: Get-Command bat
+  
+  - name: Disable Cat from CoreUtils
+    shell:
+      type: powershell
+      command: |
+        & 'coreutils-manager.exe' disable cat
+    when:
+      - facts.os_family == "windows"
+      - bat_exists.rc == 0

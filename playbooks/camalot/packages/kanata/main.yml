@@ -1,0 +1,24 @@
+---
+
+tags:
+  - keyboard
+  - kanata
+
+tasks:
+  - name: Install Kanata
+    xget:
+      package: jtroo/kanata
+      state: ${{ package.state }}
+      args:
+        - --to=~/.local/bin/kanata/
+        - --upgrade-only
+        - --file='*'
+        - --all
+        - --asset=".zip"
+
+
+  - name: Copy Kanata Keyboard Layout
+    copy:
+      src: files/kanata.kbd
+      dest: ~/.config/kanata/kanata.kbd
+      state: ${{ package.state }}

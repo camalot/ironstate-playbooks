@@ -1,0 +1,35 @@
+---
+
+vars:
+  kanata:
+    mode: tty
+    intercept: winIOv2
+
+tasks:
+
+
+  - name: Copy Kanata Run Script
+    copy:
+      src: files/run.bat
+      dest: ~/.config/kanata/run.bat
+      state: ${{ package.state }}
+
+  - name: Create Symlink for Kanata Executable
+    symlinks:
+      # todo: setting for the file mode to use
+      src: ~/.local/bin/kanata/kanata_windows_{{ kanata.mode | default('tty') }}_{{ kanata.intercept | default('winIOv2') }}_cmd_allowed_x64
+      dest: ~/.local/bin/kanata.exe
+      state: ${{ package.state }}
+
+  - name: Create Scheduled Task for Kanata
+    scheduled_task:
+      state: ${{ package.state }}
+      name: Kanata KB Mapper
+      # principal: 'SYSTEM'
+      actions:
+        - execute: ''
+          arguments: ''
+          working_directory: ''
+      triggers:
+        - type: 'logon'
+        

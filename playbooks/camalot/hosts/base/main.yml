@@ -23,6 +23,10 @@ tasks:
     include:
       name: tasks/debian-based
 
+  - name: Include Common Packages
+    include:
+      name: packages/common
+
   - name: Include Languages Role
     include:
       name: roles/languages

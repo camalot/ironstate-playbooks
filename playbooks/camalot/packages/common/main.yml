@@ -1,0 +1,123 @@
+---
+
+tasks:
+  - name: Install JQ
+    xget:
+      package: jqlang/jq
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+        - --ignore=".sbom.json"
+
+  - name: Install YQ
+    xget:
+      package: mikefarah/yq
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+        - --ignore=".sbom.json"
+
+  - name: Install FD
+    xget:
+      package: sharkdp/fd
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+        - --ignore=".sbom.json"
+        - --ignore="msvc.zip"
+        - --ignore="musl.tar.gz"
+
+  - name: Install Clipboard
+    xget:
+      package: Slackadays/Clipboard
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Envdiff
+    xget:
+      package: GBerghoff/envdiff
+      state: ${{ package.state }}
+      args:
+        - --to="${{ facts.local_bin_path }}"
+        - --asset="${{ facts.os_family == 'windows' | ternary('.zip', '.tar.gz') }}"
+
+  - name: Install Envfetch
+    xget:
+      package: ankddev/envfetch
+      state: ${{ package.state }}
+      args:
+        - --to="${{ facts.local_bin_path }}"
+        - --asset="${{ facts.os_family == 'windows' | ternary('.zip', '.tar.gz') }}"
+        - --binary=${{ join('envfetch') | extension('exe') }}
+
+  - name: Install Envx
+    xget:
+      package: mikeleppane/envx
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Fx
+    xget:
+      package: antonmedv/fx
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Tealdeer
+    cargo:
+      package: tealdeer
+      state: ${{ package.state }}
+
+  - name: Install Dust
+    tags: 
+      - cli
+    xget:
+      package: bootandy/dust
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Fastfetch
+    xget:
+      package: fastfetch-cli/fastfetch
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Procs
+    xget:
+      package: dalance/procs/
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Sd
+    xget:
+      package: chmln/sd
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Hostctl
+    xget:
+      package: guumaster/hostctl
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+
+  - name: Install Rustormy
+    xget:
+      package: Tairesh/rustormy
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+        - --ignore=".sbom.json"
+
+  - name: Install NBping
+    xget:
+      package: hanshuaikang/NBping
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}

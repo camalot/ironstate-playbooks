@@ -1,0 +1,14 @@
+---
+
+
+tasks:
+
+
+  - name: Install Bat
+    id: install_bat
+    xget:
+      package: sharkdp/bat
+      state: ${{ package.state }}
+      args:
+        - --to=${{ facts.local_bin_path }}
+        - --upgrade-only

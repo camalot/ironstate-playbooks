@@ -1,0 +1,1 @@
+%USERPROFILE%\.kanata\kanata.exe --cfg "%USERPROFILE%\.config\.kanata\kanata.kbd"

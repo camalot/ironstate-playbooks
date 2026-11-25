@@ -1,0 +1,29 @@
+---
+
+tasks:
+
+
+  - name: Install Superfile
+    tags: 
+      - files
+      - cli
+    winget:
+      package: yorukot.superfile
+      source: winget
+      state: ${{ package.state }}
+
+  - name: Install Task
+    tags: 
+      - task
+      - cli
+    winget:
+      package: Task.Task
+      source: winget
+      state: ${{ package.state }}
+
+
+  - name: Install Croc
+    winget:
+      package: schollz.croc
+      source: winget
+      state: ${{ package.state }}
